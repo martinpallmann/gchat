@@ -1,3 +1,5 @@
+import sbt.Keys.mainClass
+
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -19,5 +21,13 @@ lazy val example = project
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
-    )
+    ),
+    exportJars := true,
+    mainClass in Compile := Some("Main")
   )
+  .enablePlugins(JavaAppPackaging)
+
+lazy val root = project
+  .aggregate(core, example)
+  .dependsOn(core, example)
+
