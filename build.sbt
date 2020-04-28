@@ -27,7 +27,7 @@ lazy val example = project
   )
   .enablePlugins(JavaAppPackaging)
 
-lazy val root = project
-  .aggregate(core, example)
-  .dependsOn(core, example)
+//lazy val root = project
+//  .aggregate(core, example)
+//  .dependsOn(core, example)
 

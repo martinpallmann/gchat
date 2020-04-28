@@ -21,7 +21,7 @@ object Main extends IOApp {
 
     BlazeServerBuilder[IO]
       .withBanner(Nil)
-      .bindHttp(9000, "0.0.0.0")
+      .bindHttp(sys.env.getOrElse("PORT", "9000").toInt, "0.0.0.0")
       .withHttpApp(routes.orNotFound)
       .resource
       .use(_ => IO.never)
