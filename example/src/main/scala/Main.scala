@@ -4,6 +4,8 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import cats.effect.{ExitCode, IO, IOApp}
 import org.http4s.implicits._
 import cats.implicits._
+import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.circe._
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 
@@ -24,13 +26,23 @@ object Main extends IOApp {
     }
   }
 
-  def eventHandling(evt: Event): String =
-    (evt.`type`, evt.space, evt.message) match {
-      case ("ADDED_TO_SPACE", Some(s), _) if s.`type` == "ROOM" =>
-        s"Thanks for adding me to ${s.displayName}."
-      case ("MESSAGE", _, Some(m)) => s"you sent a message. '${m.text}'"
-      case _                       => "I don't understand."
-    }
+  def eventHandling(evt: Event): String = evt match {
+    case Event.AddedToSpace(eventTime, space, message, user) =>
+      s"""Thanks for adding me to a space.
+         |EventTime: $eventTime
+         |Space: $space
+         |Message: $message
+         |User: $user
+         |""".stripMargin
+    case Event.Message(eventTime, space, message, user) =>
+      s"""You sent a message.
+         |EventTime: $eventTime
+         |Space: $space
+         |Message: $message
+         |User: $user
+         |""".stripMargin
+    case Event.RemovedFromSpace(_, _, _) => "Removed. This goes into the void."
+  }
 
   override def run(args: List[String]): IO[ExitCode] = {
 
