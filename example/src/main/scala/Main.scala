@@ -19,7 +19,7 @@ object Main extends IOApp {
       case req @ POST -> Root =>
         for {
           evt <- req.as[Event]
-          resp <- Ok(TextResponse(""))
+          resp <- Ok(TextResponse(eventHandling(evt)))
         } yield (resp)
     }
   }
