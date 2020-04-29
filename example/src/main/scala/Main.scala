@@ -26,7 +26,7 @@ object Main extends IOApp {
 
   def eventHandling(evt: Event): String =
     (evt.`type`, evt.space, evt.message) match {
-      case ("ADDED_TO_SPACE", Some(s), _) =>
+      case ("ADDED_TO_SPACE", Some(s), _) if s.`type` == "ROOM" =>
         s"Thanks for adding me to ${s.displayName}."
       case ("MESSAGE", _, Some(m)) => s"you sent a message. '${m.text}'"
       case _                       => "I don't understand."
