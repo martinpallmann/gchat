@@ -1,6 +1,6 @@
 package de.martinpallmann.gchat.tck
 
-import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.BotRequest
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.io.Source
@@ -10,7 +10,7 @@ trait Tck[JSON] extends AnyFunSuite {
 
   def parseJson: String => Try[JSON]
   // def encode: Response => JSON
-  def decode: JSON => Try[Event]
+  def decode: JSON => Try[BotRequest]
 
 //  tests("response").map(
 //    t =>
@@ -23,7 +23,7 @@ trait Tck[JSON] extends AnyFunSuite {
       test(s"should decode event: $t") {
         // TODO: better error handling
         assert(event(t) == decode(readJson("event", t)).get)
-    }
+      }
   )
 
   private def tests(dir: String): List[String] =
@@ -51,7 +51,7 @@ trait Tck[JSON] extends AnyFunSuite {
 //      )
 //      .response
 
-  private def event(test: String): Event =
+  private def event(test: String): BotRequest =
     Reflection
       .eventTestCase(
         s"de.martinpallmann.gchat.tck.event.${toCamelCase(test)}TestCase"

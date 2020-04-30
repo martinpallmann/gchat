@@ -1,8 +1,8 @@
 package de.martinpallmann.gchat.tck
 
-import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.BotRequest
 
 abstract private[tck] class EventTestCase {
-  def event: Event
+  def event: BotRequest
   override def toString: String = event.toString
 }

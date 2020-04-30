@@ -1,13 +1,13 @@
 package de.martinpallmann.gchat.tck.event
 
 import java.time.Instant
-import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.BotRequest
 import de.martinpallmann.gchat.gen._
-import de.martinpallmann.gchat.Event.AddedToSpaceEvent
+import de.martinpallmann.gchat.BotRequest.AddedToSpace
 import de.martinpallmann.gchat.tck.EventTestCase
 
 class AddedToSpaceTestCase extends EventTestCase {
-  def event: Event = {
+  def event: BotRequest = {
 //    AddedToSpaceEvent(
 //      Instant.parse("2017-03-02T19:02:59.910959Z"),
 //      Space(

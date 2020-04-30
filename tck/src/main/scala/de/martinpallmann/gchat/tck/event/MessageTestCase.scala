@@ -2,12 +2,12 @@ package de.martinpallmann.gchat.tck.event
 
 import java.time.Instant
 
-import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.BotRequest
 import de.martinpallmann.gchat.gen._
 import de.martinpallmann.gchat.tck.EventTestCase
 
 class MessageTestCase extends EventTestCase {
-  def event: Event = {
+  def event: BotRequest = {
     ???
 //    MessageEvent(
 //      Instant.parse("2017-03-02T19:02:59.910959Z"),
