@@ -1,4 +1,5 @@
-import org.http4s.HttpRoutes
+import cats.data.Kleisli
+import org.http4s.{AuthedRequest, AuthedRoutes, HttpRoutes, Request}
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeServerBuilder
 import cats.effect.{ExitCode, IO, IOApp}
@@ -12,6 +13,7 @@ import de.martinpallmann.gchat.BotRequest.{
 }
 import de.martinpallmann.gchat.BotResponse._
 import de.martinpallmann.gchat.circe._
+import de.martinpallmann.gchat.example.jwt.Verify
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 
@@ -34,6 +36,7 @@ object Main extends IOApp {
 
   val eventHandling: BotRequest => BotResponse = {
     case AddedToSpace(eventTime, space, message, user) =>
+      Verify.verify()
       Text(s"""Thanks for adding me to a space.
          |EventTime: $eventTime
          |Space: $space
@@ -41,6 +44,7 @@ object Main extends IOApp {
          |User: $user
          |""".stripMargin)
     case MessageReceived(eventTime, space, message, user) =>
+      Verify.verify()
       Text(s"""You sent a message.
          |EventTime: $eventTime
          |Space: $space
@@ -48,6 +52,7 @@ object Main extends IOApp {
          |User: $user
          |""".stripMargin)
     case RemovedFromSpace(_, _, _) =>
+      Verify.verify()
       Empty
   }
 
