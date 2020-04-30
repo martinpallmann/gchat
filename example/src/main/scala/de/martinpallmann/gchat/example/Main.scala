@@ -6,7 +6,13 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.BotResponse.{Card, Empty, Text}
+import de.martinpallmann.gchat.BotResponse.{
+  Card,
+  CardNoTitle,
+  Empty,
+  Text,
+  TextCard
+}
 import de.martinpallmann.gchat.example.jwt.Verify
 import de.martinpallmann.gchat.{BotRequest, BotResponse}
 import de.martinpallmann.gchat.circe._
@@ -62,8 +68,10 @@ object Main extends IOApp {
               |
               |$u
               |```""".stripMargin)
-    case MessageReceived(t, s, m, u) =>
+    case MessageReceived(t, s, m, u) if arg(m, "hey") =>
       Card("Hey", "Wicky Hey")
+    case MessageReceived(t, s, m, u) =>
+      TextCard("You said <b>" + m.argumentText.getOrElse("what?") + "</b>")
     case RemovedFromSpace(_, _, _) =>
       Empty
   }

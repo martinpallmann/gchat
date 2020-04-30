@@ -31,6 +31,20 @@ object BotResponse {
       )
   }
 
+  case class TextCard(text: String) extends BotResponse {
+    def toMessage: gen.Message =
+      gen.Message(cards =
+        List(
+          gen.Card(sections =
+            List(
+              gen
+                .Section(widgets = List(gen.WidgetMarkup(textParagraph = text)))
+            )
+          )
+        )
+      )
+  }
+
   case class Text(text: String) extends BotResponse {
     def toMessage: gen.Message =
       gen.Message(text = text)
