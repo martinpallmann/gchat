@@ -6,7 +6,7 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.BotResponse.{Empty, Text}
+import de.martinpallmann.gchat.BotResponse.{Card, Empty, Text}
 import de.martinpallmann.gchat.example.jwt.Verify
 import de.martinpallmann.gchat.{BotRequest, BotResponse}
 import de.martinpallmann.gchat.circe._
@@ -19,6 +19,7 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.implicits._
 import cats.implicits._
+import de.martinpallmann.gchat.gen.Message
 
 object Main extends IOApp {
 
@@ -37,31 +38,33 @@ object Main extends IOApp {
     }
   }
 
+  def arg(m: Message, s: String): Boolean =
+    m.argumentText.map(_.trim).contains(s)
+
   val eventHandling: BotRequest => BotResponse = {
     case AddedToSpace(eventTime, space, message, user) =>
-      Verify.verify()
       Text(s"""Thanks for adding me to a space.
          |EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
          |""".stripMargin)
-    case MessageReceived(eventTime, space, message, user) =>
-      Verify.verify()
+    case MessageReceived(t, s, m, u) if arg(m, "debug") =>
       Text(s"""
-         |`Hi ${user.displayName.getOrElse("stranger")}`
-         |*You* sent _me_ a ~pidgeon~ message.
-         |```
-         |EventTime($eventTime)
-         |
-         |$space
-         |
-         |$message
-         |
-         |$user
-         |```""".stripMargin)
+              |`Hi ${u.displayName.getOrElse("stranger")}`
+              |*You* sent _me_ a ~pidgeon~ message.
+              |```
+              |EventTime($t)
+              |
+              |$s
+              |
+              |$m
+              |
+              |$u
+              |```""".stripMargin)
+    case MessageReceived(t, s, m, u) =>
+      Card("Hey", "Wicky Hey")
     case RemovedFromSpace(_, _, _) =>
-      Verify.verify()
       Empty
   }
 
