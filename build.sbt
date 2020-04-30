@@ -1,11 +1,5 @@
-import sbt.Keys.mainClass
-
 ThisBuild / scalaVersion := "2.13.2"
-ThisBuild / organization := "de.martinpallmann"
-Global / onChangedBuildSource := ReloadOnSourceChanges
-
-val circeVersion = "0.13.0"
-val http4sVersion = "0.21.2"
+ThisBuild / organization := "de.martinpallmann.gchat"
 
 lazy val core = project
   .settings(Compile / sourceGenerators += Def.task {
@@ -44,6 +38,9 @@ lazy val example = project
       "io.circe" %% "circe-generic" % circeVersion,
     ),
     exportJars := true,
-    mainClass in Compile := Some("Main")
+    sbt.Keys.mainClass in Compile := Some("Main")
   )
   .enablePlugins(JavaAppPackaging)
+
+def circeVersion = "0.13.0"
+def http4sVersion = "0.21.2"

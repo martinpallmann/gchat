@@ -1,10 +1,18 @@
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
+import scala.collection.immutable
+
 case class Schema(id: String,
                   description: Option[String],
                   `type`: Schema.Type,
-                  properties: Map[PropertyName, Property]) {
+                  properties: Map[PropertyName, Property],
+                  pck: Option[String]) {
+
+  def pckString: String = pck.map(p => s"package $p\n\n").getOrElse("")
+
+  def fileName: String =
+    pck.map(_.replace('.', '/') + "/").getOrElse("") + s"$id.scala"
 
   private def safeComment(c: String) =
     c.replace("/", "&#47;")
@@ -21,22 +29,30 @@ case class Schema(id: String,
 
   def beautify(s: String): String =
     if (s.isEmpty) ""
-    else " * " + s.replace("\n", "\n * ")
+    else "\n * " + s.replace("\n", "\n * ")
 
-  def classScalaDoc: String = description.fold("")(s => s"""/**
-       |${beautify(s)}${beautify(propertiesScalaDoc)}
+  def classScalaDoc: String =
+    description.fold("")(s => s"""/**${beautify(s.trim + propertiesScalaDoc)}
        | */
        |""".stripMargin)
 
   def vals: String =
     properties
-      .map { case (name, property) => s"""$name: $property""" }
-      .mkString(", ")
+      .map {
+        case (name, property) =>
+          s"""$name: ${property.show(id + name.name.capitalize)}"""
+      }
+      .mkString("\n  ", ",\n  ", "\n")
+
+  def enums: List[Property.Enum] =
+    properties.toList
+      .flatMap {
+        case (name, property) =>
+          property.enums(id + name.name.capitalize)
+      }
 
   def sourceCode: String =
-    s"""
-       |${classScalaDoc}case class $id($vals)
-       |""".stripMargin
+    s"$pckString${classScalaDoc}case class $id($vals)\n".stripMargin
 }
 
 object Schema {

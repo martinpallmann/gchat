@@ -50,6 +50,7 @@ object Main extends IOApp {
       .withBanner(Nil)
       .bindHttp(sys.env.getOrElse("PORT", "9000").toInt, "0.0.0.0")
       .withHttpApp(routes.orNotFound)
+      .withServiceErrorHandler(ErrorHandler[IO])
       .resource
       .use(_ => IO.never)
       .as(ExitCode.Success)

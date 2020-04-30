@@ -150,7 +150,7 @@
           "description": "The image's type (e.g. square border or circular border).",
           "type": "string",
           "enumDescriptions": [
-            "",
+            "DO NOT USE",
             "Square border.",
             "Circular border."
           ]
