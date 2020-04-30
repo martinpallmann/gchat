@@ -28,9 +28,19 @@ object Layout {
   def kvLayout: Lay[ILoggingEvent] =
     new LayoutBase[ILoggingEvent] {
 
+      private def shouldQuote(s: String): Boolean =
+        s.contains(" ")
+
+      private def quoteValue(s: String): String =
+        if (shouldQuote(s)) s""""$s""""
+        else s
+
+      private def escape(s: String): String =
+        s.replace("\"", "'").replace("\n", "\\n")
+
       private def put(kv: (String, String)*): String = {
         kv.map {
-            case (k, v) => s"""$k="$v""""
+            case (k, v) => s"""$k=${quoteValue(escape(v))}"""
           }
           .mkString("", " ", "\n")
       }
