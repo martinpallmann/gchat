@@ -33,9 +33,12 @@ class LoggingConfig extends ContextAwareBase with Configurator {
 
   def pLayout(lc: LoggerContext): PatternLayout = {
     val layout = new PatternLayout()
-    layout.setPattern(
-      "%highlight(%-5level) %cyan(%logger)\n      %replace(%msg){'(\n)','$1      '}%n"
-    );
+    layout.setPattern(sys.env.getOrElse("LOGGING", "DEV") match {
+      case "LIVE" =>
+        """at=%level logger=%logger msg="%replace(%msg){'(\n)',' '}"%n"""
+      case _ =>
+        "%highlight(%-5level) %cyan(%logger)\n      %replace(%msg){'(\n)','$1      '}%n"
+    })
     layout.setContext(lc)
     layout.start()
     layout
