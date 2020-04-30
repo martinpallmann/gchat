@@ -4,13 +4,14 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import cats.effect.{ExitCode, IO, IOApp}
 import org.http4s.implicits._
 import cats.implicits._
-import de.martinpallmann.gchat.Event
-import de.martinpallmann.gchat.Event.{
-  AddedToSpaceEvent,
-  MessageEvent,
-  RemovedFromSpaceEvent,
+import de.martinpallmann.gchat.{BotRequest, BotResponse}
+import de.martinpallmann.gchat.BotRequest.{
+  AddedToSpace,
+  MessageReceived,
+  RemovedFromSpace
 }
 import de.martinpallmann.gchat.circe._
+import de.martinpallmann.gchat.gen.Message
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 
@@ -25,29 +26,29 @@ object Main extends IOApp {
       case _ @GET -> Root => Ok("Hello World\n")
       case req @ POST -> Root =>
         for {
-          evt <- req.as[Event]
-          resp <- Ok(TextResponse(eventHandling(evt)))
+          evt <- req.as[BotRequest]
+          resp <- Ok(eventHandling(evt))
         } yield (resp)
     }
   }
 
-  val eventHandling: Event => String = {
-    case AddedToSpaceEvent(eventTime, space, message, user) =>
-      s"""Thanks for adding me to a space.
+  val eventHandling: BotRequest => Message = {
+    case AddedToSpace(eventTime, space, message, user) =>
+      BotResponse.text(s"""Thanks for adding me to a space.
          |EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
-         |""".stripMargin
-    case MessageEvent(eventTime, space, message, user) =>
-      s"""You sent a message.
+         |""".stripMargin)
+    case MessageReceived(eventTime, space, message, user) =>
+      BotResponse.text(s"""You sent a message.
          |EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
-         |""".stripMargin
-    case RemovedFromSpaceEvent(_, _, _) =>
-      "Removed. This goes into the void."
+         |""".stripMargin)
+    case RemovedFromSpace(_, _, _) =>
+      BotResponse.empty
   }
 
   override def run(args: List[String]): IO[ExitCode] = {

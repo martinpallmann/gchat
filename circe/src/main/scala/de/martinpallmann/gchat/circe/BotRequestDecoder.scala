@@ -2,13 +2,18 @@ package de.martinpallmann.gchat.circe
 
 import java.time.Instant
 import de.martinpallmann.gchat.gen._
-import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.BotRequest
+import de.martinpallmann.gchat.BotRequest.{
+  AddedToSpace,
+  MessageReceived,
+  RemovedFromSpace
+}
 import io.circe._
 import io.circe.generic.semiauto._
 
 import scala.util.Try
 
-trait EventDecoder {
+trait BotRequestDecoder {
 
   implicit val decodeInstant: Decoder[Instant] =
     Decoder.decodeString.emapTry(s => Try(Instant.parse(s)))
@@ -188,22 +193,22 @@ trait EventDecoder {
   implicit val decodeUser: Decoder[User] =
     deriveDecoder[User]
 
-  implicit val decodeEventAdded: Decoder[Event.AddedToSpaceEvent] =
-    deriveDecoder[Event.AddedToSpaceEvent]
+  implicit val decodeAddedToSpace: Decoder[AddedToSpace] =
+    deriveDecoder[AddedToSpace]
 
-  implicit val decodeEventMessage: Decoder[Event.MessageEvent] =
-    deriveDecoder[Event.MessageEvent]
+  implicit val decodeMessageReceived: Decoder[MessageReceived] =
+    deriveDecoder[MessageReceived]
 
-  implicit val decodeEventRemoved: Decoder[Event.RemovedFromSpaceEvent] =
-    deriveDecoder[Event.RemovedFromSpaceEvent]
+  implicit val decodeRemovedFromSpace: Decoder[RemovedFromSpace] =
+    deriveDecoder[RemovedFromSpace]
 
-  implicit val decodeEvent: Decoder[Event] = (c: HCursor) =>
+  implicit val decodeBotRequest: Decoder[BotRequest] = (c: HCursor) =>
     for {
       t <- c.downField("type").as[String]
       r <- t match {
-        case "ADDED_TO_SPACE"     => decodeEventAdded(c)
-        case "MESSAGE"            => decodeEventMessage(c)
-        case "REMOVED_FROM_SPACE" => decodeEventRemoved(c)
+        case "ADDED_TO_SPACE"     => decodeAddedToSpace(c)
+        case "MESSAGE"            => decodeMessageReceived(c)
+        case "REMOVED_FROM_SPACE" => decodeRemovedFromSpace(c)
         case x                    => Left(DecodingFailure(s"unknown type: $x", c.history))
       }
     } yield r

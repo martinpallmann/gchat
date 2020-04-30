@@ -46,24 +46,27 @@ case class Property(
       )
     }
 
-  def show(name: String): String =
+  def enrich(s: String, optional: Boolean): String =
+    if (optional) s"Option[$s] = None" else s
+
+  def show(name: String, optional: Boolean = true): String =
     (`$ref`, `type`, format, items, enums(name)) match {
       case (Some(s), _, _, _, _) =>
-        s"Option[$s]"
+        enrich(s"$s", optional)
       case (None, Some(Property.Type.Array), _, Some(i), _) =>
-        s"Option[List[${i.show(name)}]]"
+        enrich(s"List[${i.show(name, optional = false)}]", optional)
       case (None, Some(Property.Type.String), _, _, Some(_)) =>
-        s"Option[${name.capitalize}]"
+        enrich(s"${name.capitalize}", optional)
       case (None, Some(Property.Type.String), Some("google-datetime"), _, _) =>
-        "Option[java.time.Instant]"
+        enrich("java.time.Instant", optional)
       case (None, Some(Property.Type.Integer), Some("int32"), _, _) =>
-        "Option[Int]"
+        enrich("Int", optional)
       case (None, Some(Property.Type.Number), Some("double"), _, _) =>
-        "Option[Double]"
+        enrich("Double", optional)
       case (None, Some(t), Some(x), _, _) =>
-        s"$t $x"
+        enrich(s"$t $x", optional)
       case (None, Some(t), _, _, _) =>
-        s"Option[$t]"
+        enrich(s"$t", optional)
       case (_, _, _, _, _) =>
         throw new IllegalArgumentException("wtf")
     }

@@ -3,28 +3,28 @@ package de.martinpallmann.gchat
 import gen._
 import java.time.Instant
 
-sealed trait Event {
+sealed trait BotRequest {
   val eventTime: Instant
 }
 
-object Event {
-  case class AddedToSpaceEvent(
+object BotRequest {
+  case class AddedToSpace(
     eventTime: Instant,
     space: Space,
     message: Option[Message],
     user: User)
-      extends Event
+      extends BotRequest
 
-  case class RemovedFromSpaceEvent(
+  case class RemovedFromSpace(
     eventTime: Instant,
     space: Space,
     user: User)
-      extends Event
+      extends BotRequest
 
-  case class MessageEvent(
+  case class MessageReceived(
     eventTime: Instant,
     space: Space,
     message: Message,
     user: User)
-      extends Event
+      extends BotRequest
 }
