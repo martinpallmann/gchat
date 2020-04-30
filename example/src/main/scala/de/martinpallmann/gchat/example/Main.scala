@@ -17,6 +17,8 @@ import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.implicits._
+import cats.implicits._
 
 object Main extends IOApp {
 
