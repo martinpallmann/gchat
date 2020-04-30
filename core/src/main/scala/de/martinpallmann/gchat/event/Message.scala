@@ -7,5 +7,5 @@ case class Message(name: String,
                    createTime: Instant,
                    text: String,
                    thread: Thread,
-                   annotations: List[Annotation],
+                   annotations: Option[List[Annotation]],
                    argumentText: String)
