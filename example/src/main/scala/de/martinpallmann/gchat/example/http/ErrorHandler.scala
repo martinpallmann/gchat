@@ -1,10 +1,11 @@
+package de.martinpallmann.gchat.example.http
+
 import cats.Monad
-import org.http4s.headers.{`Content-Length`, Connection}
-import org.http4s.{Headers, MessageFailure, Request, Response, Status}
-import org.slf4j.{Logger, LoggerFactory}
-import org.http4s.util.CaseInsensitiveString
-import cats.implicits._
 import io.circe.DecodingFailure
+import org.http4s.headers.{`Content-Length`, Connection}
+import org.http4s.util.CaseInsensitiveString
+import org.http4s._
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.util.control.NonFatal
 

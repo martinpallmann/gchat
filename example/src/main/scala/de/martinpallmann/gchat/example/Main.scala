@@ -1,21 +1,22 @@
-import cats.data.Kleisli
-import org.http4s.{AuthedRequest, AuthedRoutes, HttpRoutes, Request}
-import org.http4s.dsl.Http4sDsl
-import org.http4s.server.blaze.BlazeServerBuilder
+package de.martinpallmann.gchat.example
+
 import cats.effect.{ExitCode, IO, IOApp}
-import org.http4s.implicits._
-import cats.implicits._
-import de.martinpallmann.gchat.{BotRequest, BotResponse}
 import de.martinpallmann.gchat.BotRequest.{
   AddedToSpace,
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.BotResponse._
-import de.martinpallmann.gchat.circe._
+import de.martinpallmann.gchat.BotResponse.{Empty, Text}
 import de.martinpallmann.gchat.example.jwt.Verify
-import org.http4s.circe.CirceEntityDecoder._
+import de.martinpallmann.gchat.{BotRequest, BotResponse}
+import de.martinpallmann.gchat.circe._
+import de.martinpallmann.gchat.example.http.ErrorHandler
+import de.martinpallmann.gchat.example.sys.Env
 import org.http4s.circe.CirceEntityEncoder._
+import org.http4s.circe.CirceEntityDecoder._
+import org.http4s.HttpRoutes
+import org.http4s.dsl.Http4sDsl
+import org.http4s.server.blaze.BlazeServerBuilder
 
 object Main extends IOApp {
 
@@ -66,7 +67,7 @@ object Main extends IOApp {
 
     BlazeServerBuilder[IO]
       .withBanner(Nil)
-      .bindHttp(sys.env.getOrElse("PORT", "9000").toInt, "0.0.0.0")
+      .bindHttp(Env.withDefault[Int]("PORT", 9000)(_.toIntOption), "0.0.0.0")
       .withHttpApp(routes.orNotFound)
       .withServiceErrorHandler(ErrorHandler[IO])
       .resource

@@ -1,5 +1,6 @@
 package de.martinpallmann.gchat.example.logging
 
+import ch.qos.logback.classic.Level.DEBUG
 import ch.qos.logback.classic.Level.INFO
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.{Configurator, ILoggingEvent}
@@ -13,14 +14,15 @@ class Config extends ContextAwareBase with Configurator {
   def configure(lc: LoggerContext): Unit = {
     implicit val loggingContext: LoggerContext = lc
     implicit val ca: Appender[ILoggingEvent] = ConsoleAppender(
-      encoder(Layout()),
+      encoder(Layout())
     )
+    Logger("de.martinpallmann.gchat.example", DEBUG)
     Logger(ROOT_LOGGER_NAME, INFO)
   }
 
   private def encoder(
-    layout: LogbackLayout[ILoggingEvent],
-  )(implicit lc: LoggerContext,
+    layout: LogbackLayout[ILoggingEvent]
+  )(implicit lc: LoggerContext
   ): Encoder[ILoggingEvent] = {
     val result = new LayoutWrappingEncoder[ILoggingEvent]
     result.setContext(lc)

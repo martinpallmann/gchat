@@ -40,7 +40,9 @@ lazy val example = project
       "io.circe" %% "circe-generic" % circeVersion
     ),
     exportJars := true,
-    sbt.Keys.mainClass in Compile := Some("Main")
+    sbt.Keys.mainClass in Compile := Some(
+      "de.martinpallmann.gchat.example.Main"
+    )
   )
   .enablePlugins(JavaAppPackaging)
 
