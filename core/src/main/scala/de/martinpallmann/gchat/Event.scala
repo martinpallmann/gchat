@@ -7,20 +7,23 @@ sealed trait Event {
 }
 
 object Event {
-  case class AddedToSpace(eventTime: Instant,
-                          space: event.Space,
-                          message: Option[event.Message],
-                          user: event.User)
+  case class AddedToSpaceEvent(
+    eventTime: Instant,
+    space: Space,
+    message: Option[Message],
+    user: User)
       extends Event
 
-  case class RemovedFromSpace(eventTime: Instant,
-                              space: event.Space,
-                              user: event.User)
+  case class RemovedFromSpaceEvent(
+    eventTime: Instant,
+    space: Space,
+    user: User)
       extends Event
 
-  case class Message(eventTime: Instant,
-                     space: event.Space,
-                     message: event.Message,
-                     user: event.User)
+  case class MessageEvent(
+    eventTime: Instant,
+    space: Space,
+    message: Message,
+    user: User)
       extends Event
 }

@@ -1,13 +1,14 @@
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
-case class Property(`$ref`: Option[String],
-                    `type`: Option[Property.Type],
-                    items: Option[Property],
-                    description: Option[String],
-                    format: Option[String],
-                    enum: Option[List[String]],
-                    enumDescriptions: Option[List[String]]) {
+case class Property(
+  `$ref`: Option[String],
+  `type`: Option[Property.Type],
+  items: Option[Property],
+  description: Option[String],
+  format: Option[String],
+  enum: Option[List[String]],
+  enumDescriptions: Option[List[String]]) {
 
   def enums(name: String): Option[Property.Enum] =
     for {
@@ -18,7 +19,7 @@ case class Property(`$ref`: Option[String],
         name,
         en.zip(ed)
           .filterNot {
-            case (_, d) => d.contains("DO NOT USE")
+            case (n, _) => n.toLowerCase.endsWith("unspecified")
           }
           .map {
             case (n, d) => Property.EnumValue(n, d)
@@ -31,7 +32,7 @@ case class Property(`$ref`: Option[String],
     (`$ref`, `type`, format, items, enums(name)) match {
       case (Some(s), _, _, _, _) => s
       case (None, Some(Property.Type.Array), _, Some(i), _) =>
-        s"""Array[${i.show(name)}]"""
+        s"""List[${i.show(name)}]"""
       case (None, Some(Property.Type.String), _, _, Some(_)) => name.capitalize
       case (None, Some(Property.Type.String), Some("google-datetime"), _, _) =>
         "java.time.Instant"
@@ -47,7 +48,10 @@ case class Property(`$ref`: Option[String],
 
 object Property {
 
-  case class Enum(name: String, value: List[EnumValue], pckg: Option[String]) {
+  case class Enum(
+    name: String,
+    value: List[EnumValue],
+    pckg: Option[String]) {
 
     def camelCase(s: String): String =
       s.foldLeft(("", true)) {

@@ -1,5 +1,6 @@
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val core = project
   .settings(Compile / sourceGenerators += Def.task {
@@ -23,7 +24,7 @@ lazy val circe = project
   .settings(
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % circeVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion
     )
   )
 
@@ -35,7 +36,7 @@ lazy val example = project
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion
     ),
     exportJars := true,
     sbt.Keys.mainClass in Compile := Some("Main")
