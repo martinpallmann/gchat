@@ -6,7 +6,13 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.BotResponse.{Card, Empty, Text, TextCard}
+import de.martinpallmann.gchat.BotResponse.{
+  Card,
+  Empty,
+  ImageCard,
+  Text,
+  TextCard
+}
 import de.martinpallmann.gchat.{BotRequest, BotResponse}
 import de.martinpallmann.gchat.circe._
 import de.martinpallmann.gchat.example.http.ErrorHandler
@@ -62,7 +68,11 @@ object Main extends IOApp {
               |$u
               |```""".stripMargin)
     case MessageReceived(t, s, m, u) if arg(m, "hey") =>
-      Card("Hey", "Wicky Hey")
+      ImageCard(
+        "Hey Wiki",
+        "(Hey)",
+        "https://media1.tenor.com/images/199478ae49b27ed5d33535f5c7f32a06/tenor.gif?itemid=5370788"
+      )
     case MessageReceived(t, s, m, u) =>
       TextCard("You said <b>" + m.argumentText.getOrElse("what?") + "</b>")
     case RemovedFromSpace(_, _, _) =>

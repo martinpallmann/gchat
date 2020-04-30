@@ -1,5 +1,7 @@
 package de.martinpallmann.gchat
 
+import de.martinpallmann.gchat.gen.Message
+
 import scala.language.implicitConversions
 
 sealed trait BotResponse {
@@ -39,6 +41,26 @@ object BotResponse {
             List(
               gen
                 .Section(widgets = List(gen.WidgetMarkup(textParagraph = text)))
+            )
+          )
+        )
+      )
+  }
+
+  case class ImageCard(
+    title: String,
+    subtitle: String,
+    imageUrl: String)
+      extends BotResponse {
+    def toMessage: gen.Message =
+      gen.Message(cards =
+        List(
+          gen.Card(
+            header = gen.CardHeader(title = title, subtitle = subtitle),
+            sections = List(
+              gen.Section(widgets =
+                List(gen.WidgetMarkup(image = gen.Image(imageUrl = imageUrl)))
+              )
             )
           )
         )
