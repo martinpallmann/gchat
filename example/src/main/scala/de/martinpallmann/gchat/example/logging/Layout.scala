@@ -48,7 +48,8 @@ object Layout {
       def doLayout(event: ILoggingEvent): String =
         put(
           "at" -> s"${event.getLevel}".toLowerCase,
-          "message" -> event.getMessage
+          "message" -> event.getMessage,
+          "logger" -> event.getLoggerName
         )
     }
 }
