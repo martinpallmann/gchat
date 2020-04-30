@@ -32,13 +32,13 @@ object Layout {
         kv.map {
             case (k, v) => s"""$k="$v""""
           }
-          .mkString(" ")
+          .mkString("", " ", "\n")
       }
 
       def doLayout(event: ILoggingEvent): String =
         put(
           "at" -> s"${event.getLevel}".toLowerCase,
-          "message" -> event.getMessage,
+          "message" -> event.getMessage
         )
     }
 }
