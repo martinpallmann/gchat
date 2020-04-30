@@ -45,12 +45,14 @@ object Main extends IOApp {
          |""".stripMargin)
     case MessageReceived(eventTime, space, message, user) =>
       Verify.verify()
-      Text(s"""You sent a message.
-         |EventTime: $eventTime
+      Text(s"""
+         |`Hi ${user.displayName.getOrElse("stranger")}`
+         |*You* sent _me_ a ~pidgeon~ message.
+         |```EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
-         |""".stripMargin)
+         |```""".stripMargin)
     case RemovedFromSpace(_, _, _) =>
       Verify.verify()
       Empty
