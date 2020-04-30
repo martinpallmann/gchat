@@ -6,6 +6,7 @@ import org.http4s.headers.{`Content-Length`, Connection}
 import org.http4s.util.CaseInsensitiveString
 import org.http4s._
 import org.slf4j.{Logger, LoggerFactory}
+import cats.implicits._
 
 import scala.util.control.NonFatal
 
