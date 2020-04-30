@@ -48,19 +48,24 @@ case class Property(
 
   def show(name: String): String =
     (`$ref`, `type`, format, items, enums(name)) match {
-      case (Some(s), _, _, _, _) => s
+      case (Some(s), _, _, _, _) =>
+        s"Option[$s]"
       case (None, Some(Property.Type.Array), _, Some(i), _) =>
-        s"""List[${i.show(name)}]"""
-      case (None, Some(Property.Type.String), _, _, Some(_)) => name.capitalize
+        s"Option[List[${i.show(name)}]]"
+      case (None, Some(Property.Type.String), _, _, Some(_)) =>
+        s"Option[${name.capitalize}]"
       case (None, Some(Property.Type.String), Some("google-datetime"), _, _) =>
-        "java.time.Instant"
+        "Option[java.time.Instant]"
       case (None, Some(Property.Type.Integer), Some("int32"), _, _) =>
-        "Int"
+        "Option[Int]"
       case (None, Some(Property.Type.Number), Some("double"), _, _) =>
-        "Double"
-      case (None, Some(t), Some(x), _, _) => s"$t $x"
-      case (None, Some(t), _, _, _)       => s"$t"
-      case (_, _, _, _, _)                => throw new IllegalArgumentException("wtf")
+        "Option[Double]"
+      case (None, Some(t), Some(x), _, _) =>
+        s"$t $x"
+      case (None, Some(t), _, _, _) =>
+        s"Option[$t]"
+      case (_, _, _, _, _) =>
+        throw new IllegalArgumentException("wtf")
     }
 }
 
