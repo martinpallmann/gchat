@@ -1,5 +1,6 @@
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
+import Property.camelCase
 
 case class Property(
   `$ref`: Option[String],
@@ -9,6 +10,23 @@ case class Property(
   format: Option[String],
   enum: Option[List[String]],
   enumDescriptions: Option[List[String]]) {
+
+  def enums2(name: String): Option[EnumDef] =
+    for {
+      en <- enum
+      ed <- enumDescriptions
+    } yield {
+      EnumDef(
+        name,
+        en.zip(ed)
+          .filterNot {
+            case (n, _) => n.toLowerCase.endsWith("unspecified")
+          }
+          .map {
+            case (n, d) => camelCase(n)
+          }
+      )
+    }
 
   def enums(name: String): Option[Property.Enum] =
     for {
@@ -48,18 +66,18 @@ case class Property(
 
 object Property {
 
+  def camelCase(s: String): String =
+    s.foldLeft(("", true)) {
+        case ((acc, _), '_')   => (acc, true)
+        case ((acc, false), c) => (acc + c.toLower, false)
+        case ((acc, true), c)  => (acc + c.toUpper, false)
+      }
+      ._1
+
   case class Enum(
     name: String,
     value: List[EnumValue],
     pckg: Option[String]) {
-
-    def camelCase(s: String): String =
-      s.foldLeft(("", true)) {
-          case ((acc, _), '_')   => (acc, true)
-          case ((acc, false), c) => (acc + c.toLower, false)
-          case ((acc, true), c)  => (acc + c.toUpper, false)
-        }
-        ._1
 
     def values: String =
       value

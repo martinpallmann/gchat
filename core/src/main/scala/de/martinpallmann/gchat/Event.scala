@@ -1,5 +1,6 @@
 package de.martinpallmann.gchat
 
+import gen._
 import java.time.Instant
 
 sealed trait Event {

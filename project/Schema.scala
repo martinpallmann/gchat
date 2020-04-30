@@ -3,11 +3,25 @@ import io.circe.generic.semiauto.deriveDecoder
 
 import scala.collection.immutable
 
-case class Schema(id: String,
-                  description: Option[String],
-                  `type`: Schema.Type,
-                  properties: Map[PropertyName, Property],
-                  pck: Option[String]) {
+case class Schema(
+  id: String,
+  description: Option[String],
+  `type`: Schema.Type,
+  properties: Map[PropertyName, Property],
+  pck: Option[String]) {
+
+  def classes: List[ClassEtAlDef] =
+    CaseClassDef(id, members) :: properties.toList
+      .flatMap {
+        case (name, property) =>
+          property.enums2(id + name.name.capitalize)
+      }
+
+  def members: List[MemberDef] =
+    properties.map {
+      case (name, property) =>
+        MemberDef(name.name, property.show(id + name.name.capitalize))
+    }.toList
 
   def pckString: String = pck.map(p => s"package $p\n\n").getOrElse("")
 

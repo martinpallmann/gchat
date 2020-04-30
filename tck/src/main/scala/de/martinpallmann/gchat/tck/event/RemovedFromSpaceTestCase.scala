@@ -3,7 +3,8 @@ package de.martinpallmann.gchat.tck.event
 import java.time.Instant
 
 import de.martinpallmann.gchat.Event.RemovedFromSpaceEvent
-import de.martinpallmann.gchat.{Event, Space, SpaceType, User, UserType}
+import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.gen._
 import de.martinpallmann.gchat.tck.EventTestCase
 
 class RemovedFromSpaceTestCase extends EventTestCase {
@@ -15,8 +16,8 @@ class RemovedFromSpaceTestCase extends EventTestCase {
         "users/12345678901234567890",
         "Chuck Norris",
         UserType.Human,
-        "https://lh3.googleusercontent.com/.../photo.jpg",
-      ),
+        "https://lh3.googleusercontent.com/.../photo.jpg"
+      )
     )
   }
 }

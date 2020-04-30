@@ -1,13 +1,8 @@
 package de.martinpallmann.gchat.circe
 
 import java.time.Instant
-
-import de.martinpallmann.gchat.Event.{
-  AddedToSpaceEvent,
-  MessageEvent,
-  RemovedFromSpaceEvent,
-}
-import de.martinpallmann.gchat.{AnnotationType, _}
+import de.martinpallmann.gchat.gen._
+import de.martinpallmann.gchat.Event
 import io.circe._
 import io.circe.generic.semiauto._
 
@@ -193,14 +188,14 @@ trait EventDecoder {
   implicit val decodeUser: Decoder[User] =
     deriveDecoder[User]
 
-  implicit val decodeEventAdded: Decoder[AddedToSpaceEvent] =
-    deriveDecoder[AddedToSpaceEvent]
+  implicit val decodeEventAdded: Decoder[Event.AddedToSpaceEvent] =
+    deriveDecoder[Event.AddedToSpaceEvent]
 
-  implicit val decodeEventMessage: Decoder[MessageEvent] =
-    deriveDecoder[MessageEvent]
+  implicit val decodeEventMessage: Decoder[Event.MessageEvent] =
+    deriveDecoder[Event.MessageEvent]
 
-  implicit val decodeEventRemoved: Decoder[RemovedFromSpaceEvent] =
-    deriveDecoder[RemovedFromSpaceEvent]
+  implicit val decodeEventRemoved: Decoder[Event.RemovedFromSpaceEvent] =
+    deriveDecoder[Event.RemovedFromSpaceEvent]
 
   implicit val decodeEvent: Decoder[Event] = (c: HCursor) =>
     for {

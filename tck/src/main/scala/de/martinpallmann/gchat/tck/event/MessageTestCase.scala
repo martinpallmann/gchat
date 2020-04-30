@@ -2,8 +2,8 @@ package de.martinpallmann.gchat.tck.event
 
 import java.time.Instant
 
-import de.martinpallmann.gchat.{Event, Message, Space, SpaceType, Thread, User}
-import de.martinpallmann.gchat.Event.MessageEvent
+import de.martinpallmann.gchat.Event
+import de.martinpallmann.gchat.gen._
 import de.martinpallmann.gchat.tck.EventTestCase
 
 class MessageTestCase extends EventTestCase {
