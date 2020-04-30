@@ -10,8 +10,8 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
+import de.martinpallmann.gchat.BotResponse._
 import de.martinpallmann.gchat.circe._
-import de.martinpallmann.gchat.gen.Message
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 
@@ -27,28 +27,28 @@ object Main extends IOApp {
       case req @ POST -> Root =>
         for {
           evt <- req.as[BotRequest]
-          resp <- Ok(eventHandling(evt))
+          resp <- Ok(eventHandling(evt).toMessage)
         } yield (resp)
     }
   }
 
-  val eventHandling: BotRequest => Message = {
+  val eventHandling: BotRequest => BotResponse = {
     case AddedToSpace(eventTime, space, message, user) =>
-      BotResponse.text(s"""Thanks for adding me to a space.
+      Text(s"""Thanks for adding me to a space.
          |EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
          |""".stripMargin)
     case MessageReceived(eventTime, space, message, user) =>
-      BotResponse.text(s"""You sent a message.
+      Text(s"""You sent a message.
          |EventTime: $eventTime
          |Space: $space
          |Message: $message
          |User: $user
          |""".stripMargin)
     case RemovedFromSpace(_, _, _) =>
-      BotResponse.empty
+      Empty
   }
 
   override def run(args: List[String]): IO[ExitCode] = {

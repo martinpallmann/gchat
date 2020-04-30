@@ -2,11 +2,17 @@ package de.martinpallmann.gchat
 
 import de.martinpallmann.gchat.gen.Message
 
+sealed trait BotResponse {
+  def toMessage: Message
+}
+
 object BotResponse {
 
-  def empty: Message =
-    Message()
+  case class Text(text: String) extends BotResponse {
+    def toMessage: Message = Message(text = Some(text))
+  }
 
-  def text(s: String): Message =
-    Message(text = Some(s))
+  case object Empty extends BotResponse {
+    def toMessage: Message = Message()
+  }
 }

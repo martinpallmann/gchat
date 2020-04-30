@@ -64,7 +64,7 @@ trait BotRequestDecoder {
       case "TRAIN"            => Right(KeyValueIcon.Train)
       case "VIDEO_CAMERA"     => Right(KeyValueIcon.VideoCamera)
       case "VIDEO_PLAY"       => Right(KeyValueIcon.VideoPlay)
-      case x                  => Left(s"unkwon KeyValueIcon: $x")
+      case x                  => Left(s"unkwon key value icon: $x")
     }
 
   implicit val decodeKeyValue: Decoder[KeyValue] =
@@ -121,7 +121,7 @@ trait BotRequestDecoder {
       case "TRAIN"            => Right(ImageButtonIcon.Train)
       case "VIDEO_CAMERA"     => Right(ImageButtonIcon.VideoCamera)
       case "VIDEO_PLAY"       => Right(ImageButtonIcon.VideoPlay)
-      case x                  => Left(s"unkwon ImageButtonIcon: $x")
+      case x                  => Left(s"unkwon image button icon: $x")
     }
 
   implicit val decodeImageButton: Decoder[ImageButton] =
@@ -164,7 +164,11 @@ trait BotRequestDecoder {
     deriveDecoder[Thread]
 
   implicit val decodeUserMentionMetadataType: Decoder[UserMentionMetadataType] =
-    deriveDecoder[UserMentionMetadataType]
+    Decoder.decodeString.emap {
+      case "ADD"     => Right(UserMentionMetadataType.Add)
+      case "MENTION" => Right(UserMentionMetadataType.Mention)
+      case x         => Left(s"unkown user mention metadata type: $x")
+    }
 
   implicit val decodeUserMentionMetadata: Decoder[UserMentionMetadata] =
     deriveDecoder[UserMentionMetadata]
@@ -172,7 +176,7 @@ trait BotRequestDecoder {
   implicit val decodeAnnotationType: Decoder[AnnotationType] =
     Decoder.decodeString.emap {
       case "USER_MENTION" => Right(AnnotationType.UserMention)
-      case x              => Left(s"unkown annotation type: $x")
+      case x              => Left(s"unkown user mention metadata: $x")
     }
 
   implicit val decodeAnnotation: Decoder[Annotation] =
