@@ -6,14 +6,7 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.BotResponse.{
-  Card,
-  CardNoTitle,
-  Empty,
-  Text,
-  TextCard
-}
-import de.martinpallmann.gchat.example.jwt.Verify
+import de.martinpallmann.gchat.BotResponse.{Card, Empty, Text, TextCard}
 import de.martinpallmann.gchat.{BotRequest, BotResponse}
 import de.martinpallmann.gchat.circe._
 import de.martinpallmann.gchat.example.http.ErrorHandler
