@@ -1,9 +1,21 @@
+import sbt.Keys.publishMavenStyle
+import xerial.sbt.Sonatype.GitHubHosting
+
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val commonSettings = Seq(
-  headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann"))
+  headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
+  publishTo := sonatypePublishToBundle.value,
+  sonatypeProfileName := "de.martinpallmann.gchat",
+  publishMavenStyle := true,
+  licenses := Seq(
+    "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
+  ),
+  sonatypeProjectHosting := Some(
+    GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
+  )
 )
 commonSettings
 enablePlugins(GitVersioning)
