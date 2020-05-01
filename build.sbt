@@ -25,7 +25,8 @@ lazy val circe = project
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion
-    )
+    ),
+    publish / skip := true
   )
 
 lazy val example = project
@@ -40,6 +41,7 @@ lazy val example = project
       "io.circe" %% "circe-generic" % circeVersion
     ),
     exportJars := true,
+    publish / skip := true,
     sbt.Keys.mainClass in Compile := Some(
       "de.martinpallmann.gchat.example.Main"
     )
@@ -48,3 +50,5 @@ lazy val example = project
 
 def circeVersion = "0.13.0"
 def http4sVersion = "0.21.2"
+
+publishTo := sonatypePublishToBundle.value
