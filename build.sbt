@@ -7,6 +7,7 @@ lazy val commonSettings = Seq(
 )
 commonSettings
 enablePlugins(GitVersioning)
+enablePlugins(GitBranchPrompt)
 
 lazy val core = project
   .settings(
