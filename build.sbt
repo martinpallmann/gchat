@@ -17,12 +17,13 @@ lazy val commonSettings = Seq(
     GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
   )
 )
-commonSettings
+publish / skip := true
 enablePlugins(GitVersioning)
 enablePlugins(GitBranchPrompt)
 
 lazy val core = project
   .settings(
+    moduleName := s"gchat-core",
     commonSettings,
     Compile / sourceGenerators += Def.task {
       val input = (Compile / sourceDirectory).value / "json" / "rest.json"
@@ -34,6 +35,7 @@ lazy val core = project
 lazy val tck = project
   .dependsOn(core)
   .settings(
+    moduleName := s"gchat-tck",
     commonSettings,
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % circeVersion,
@@ -46,6 +48,7 @@ lazy val tck = project
 lazy val circe = project
   .dependsOn(core, tck % "test->compile")
   .settings(
+    moduleName := s"gchat-circe",
     commonSettings,
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % circeVersion,
@@ -56,6 +59,7 @@ lazy val circe = project
 lazy val example = project
   .dependsOn(core, circe)
   .settings(
+    moduleName := s"gchat-example",
     commonSettings,
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.2.3",
