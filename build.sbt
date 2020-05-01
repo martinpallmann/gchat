@@ -2,6 +2,8 @@ ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
+enablePlugins(GitVersioning)
+
 lazy val core = project
   .settings(Compile / sourceGenerators += Def.task {
     val input = (Compile / sourceDirectory).value / "json" / "rest.json"
@@ -50,5 +52,3 @@ lazy val example = project
 
 def circeVersion = "0.13.0"
 def http4sVersion = "0.21.2"
-
-publishTo := sonatypePublishToBundle.value
