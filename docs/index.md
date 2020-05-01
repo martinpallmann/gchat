@@ -1,3 +1,3 @@
-# Do you need help building a chat bot for the hangout api?
+# Google Chat API
 
-This can help you maybe.
+This can help you maybe. Maybe not.
