@@ -7,8 +7,6 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val commonSettings = Seq(
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
-  publishTo := sonatypePublishToBundle.value,
-  sonatypeProfileName := "de.martinpallmann",
   publishMavenStyle := true,
   licenses := Seq(
     "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
