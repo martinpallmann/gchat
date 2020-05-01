@@ -6,7 +6,7 @@ ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val commonSettings = Seq(
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := sonatypePublishTo.value,
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
   publishMavenStyle := true,
   licenses := Seq(
