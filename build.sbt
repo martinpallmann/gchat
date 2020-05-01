@@ -7,6 +7,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishTo.value,
+  sonatypeProfileName := "martinpallmann",
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
   publishMavenStyle := true,
   licenses := Seq(
