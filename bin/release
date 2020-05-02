@@ -1,6 +1,84 @@
 #! /bin/sh
 
-currentVersion=$(sbt version | grep -A2 "version" | tail -1 | awk '{ print $2 }')
-echo "current version: [$currentVersion]"
-echo "$currentVersion" | sed -e '/+.*/d'
+bold=$(tput bold)
+normal=$(tput sgr0)
 
+major() {
+  echo "$1" | cut -sd'.' -f1
+}
+
+minor() {
+  echo "$1" | cut -sd'.' -f2
+}
+
+hotfix() {
+  echo "$1" | cut -sd'.' -f3
+}
+
+incMajorVersion() {
+  printf "%s.0" $(($(major "$1") + 1))
+}
+
+incMinorVersion() {
+  printf "%s.%s" "$(major "$1")" $(($(minor "$1") + 1))
+}
+
+incHotfixVersion() {
+  printf "%s.%s.%s" "$(major "$1")" "$(minor "$1")" $(($(hotfix "$1") + 1))
+}
+
+currentVersion() {
+  sbt version | grep -A2 "version" | tail -1 | awk '{ print $2 }'
+}
+
+isDirty() {
+  if [ "" = "$(echo "$1" | cut -sd'+' -f2)" ]; then
+    echo false
+  else
+    echo true
+  fi
+}
+
+releaseVersion() {
+  if [ "$(isDirty "$1")" = true ]; then
+    printf "Repository is dirty. Please commit your changes first.\n"
+    exit 1
+  fi
+  newVersion="$($2 "$1")"
+  printf "Version: ${bold}%s${normal} [Y/n] " "$newVersion"
+  read -r answer
+  if [ "$answer" != "${answer#[Yy]}" ] || [ "$answer" = "" ] ;then
+    echo git tag -a "v$newVersion" -m "version $newVersion"
+    echo git push origin "v$newVersion"
+  fi
+
+}
+
+case "$1" in
+  "major")
+    releaseVersion "$(currentVersion)" "incMajorVersion"
+    ;;
+  "minor")
+    releaseVersion "$(currentVersion)" "incMinorVersion"
+    ;;
+  "hotfix")
+    releaseVersion "$(currentVersion)" "incHotfixVersion"
+    ;;
+  "test")
+    releaseVersion "$2" "incHotfixVersion"
+    ;;
+  "")
+    printf "Parameter missing.\n"
+    printf "Usage: release [major|minor|hotfix]\n"
+    exit 1
+    ;;
+  "help")
+    printf "Usage: release [major|minor|hotfix]\n"
+    exit 1
+    ;;
+  *)
+    printf "Unknown parameter: %s\n" "$1"
+    printf "Usage: release [major|minor|hotfix]\n"
+    exit 1
+    ;;
+esac
