@@ -48,3 +48,5 @@ curl localhost:9000 -XPOST -d '{
     }
 }'
 ```
+
+More documentation about the message format can be found here: [https://developers.google.com/hangouts/chat/reference](https://developers.google.com/hangouts/chat/reference)
