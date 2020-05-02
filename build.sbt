@@ -54,6 +54,18 @@ lazy val circe = project
     )
   )
 
+lazy val bot = project
+  .dependsOn(core, circe)
+  .settings(
+    moduleName := s"gchat-bot",
+    commonSettings,
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-dsl" % http4sVersion,
+      "org.http4s" %% "http4s-blaze-server" % http4sVersion,
+      "org.http4s" %% "http4s-circe" % http4sVersion
+    )
+  )
+
 lazy val example = project
   .dependsOn(core, circe)
   .settings(

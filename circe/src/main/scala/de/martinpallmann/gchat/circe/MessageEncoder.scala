@@ -116,7 +116,7 @@ trait MessageEncoder {
     enumEncoder[UserType]
 
   implicit val encodeMessage: Encoder[Message] =
-    deriveEncoder[Message]
+    deriveEncoder[Message].mapJson(_.deepDropNullValues)
 
   def enumEncoder[A]: Encoder[A] = {
     val snakeCase: String => String = _.foldLeft("") {
