@@ -1,12 +1,7 @@
 # Google Chat API
 
-add 
-```libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"```
-do your build.sbt
-
-and implement the 
-```de.martinpallmann.gchat.bot.Bot```
-trait.
+add `libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"`
+do your build.sbt and implement the `de.martinpallmann.gchat.bot.Bot` trait.
 
 Like so, maybe:
 
