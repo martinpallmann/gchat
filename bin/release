@@ -52,7 +52,7 @@ releaseVersion() {
     git tag -a "v$newVersion" -m "version $newVersion"
     printf "Push tag 'v%s' to origin.\n" "$newVersion"
     git push origin "v$newVersion" 2> /dev/null
-    sbt ";clean ;publishSigned ;sonatypeBundleUpload"
+    sbt ";clean ;publishSigned ;sonatypeBundleUpload ;sonatypeRelease"
   fi
 
 }
