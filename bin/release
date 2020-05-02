@@ -28,46 +28,43 @@ incHotfixVersion() {
 }
 
 currentVersion() {
-  sbt version | grep -A2 "version" | tail -1 | awk '{ print $2 }'
+  sbt version | grep -A2 "version" | tail -1 | awk '{ print $2 }' | cut -d'+' -f1
 }
 
 isDirty() {
-  if [ "" = "$(echo "$1" | cut -sd'+' -f2)" ]; then
-    echo false
-  else
-    echo true
-  fi
+  if [ "" = "$(git diff HEAD)" ]; then
+      false
+    else
+      true
+    fi
 }
 
 releaseVersion() {
-  if [ "$(isDirty "$1")" = true ]; then
+  if isDirty; then
     printf "Repository is dirty. Please commit your changes first.\n"
     exit 1
   fi
-  newVersion="$($2 "$1")"
+  newVersion="$($1 "$(currentVersion)")"
   printf "Version: ${bold}%s${normal} [Y/n] " "$newVersion"
   read -r answer
   if [ "$answer" != "${answer#[Yy]}" ] || [ "$answer" = "" ] ;then
-    printf "Create tag.\n"
-    echo git tag -a "v$newVersion" -m "version $newVersion"
-    printf "Push tag to origin.\n"
-    echo git push origin "v$newVersion" 2> /dev/null
+    printf "Create tag 'v%s'.\n" "$newVersion"
+    git tag -a "v$newVersion" -m "version $newVersion"
+    printf "Push tag 'v%s' to origin.\n" "$newVersion"
+    git push origin "v$newVersion" 2> /dev/null
   fi
 
 }
 
 case "$1" in
   "major")
-    releaseVersion "$(currentVersion)" "incMajorVersion"
+    releaseVersion "incMajorVersion"
     ;;
   "minor")
-    releaseVersion "$(currentVersion)" "incMinorVersion"
+    releaseVersion "incMinorVersion"
     ;;
   "hotfix")
-    releaseVersion "$(currentVersion)" "incHotfixVersion"
-    ;;
-  "test")
-    releaseVersion "$2" "incHotfixVersion"
+    releaseVersion "incHotfixVersion"
     ;;
   "")
     printf "Parameter missing.\n"

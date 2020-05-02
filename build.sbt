@@ -6,8 +6,6 @@ ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 sonatypeProfileName := "de.martinpallmann"
 
-dynverSonatypeSnapshots in ThisBuild := true
-
 lazy val commonSettings = Seq(
 //  publishTo := sonatypePublishToBundle.value,
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
