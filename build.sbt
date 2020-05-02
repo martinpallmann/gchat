@@ -4,10 +4,12 @@ import xerial.sbt.Sonatype.GitHubHosting
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
+sonatypeProfileName := "martinpallmann"
+
+dynverSonatypeSnapshots in ThisBuild := true
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishTo.value,
-  sonatypeProfileName := "martinpallmann",
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
   publishMavenStyle := true,
   licenses := Seq(
@@ -18,8 +20,6 @@ lazy val commonSettings = Seq(
   )
 )
 publish / skip := true
-enablePlugins(GitVersioning)
-enablePlugins(GitBranchPrompt)
 
 lazy val core = project
   .settings(

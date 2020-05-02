@@ -1,0 +1,6 @@
+#! /bin/sh
+
+currentVersion=$(sbt version | grep -A2 "version" | tail -1 | awk '{ print $2 }')
+echo "current version: [$currentVersion]"
+echo "$currentVersion" | sed -e '/+.*/d'
+
