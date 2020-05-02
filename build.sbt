@@ -4,7 +4,7 @@ import xerial.sbt.Sonatype.GitHubHosting
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
-sonatypeProfileName := "de.martinpallmann"
+sonatypeProfileName := "de.martinpallmann.gchat"
 
 lazy val commonSettings = Seq(
 //  publishTo := sonatypePublishToBundle.value,
