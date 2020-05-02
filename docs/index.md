@@ -24,7 +24,6 @@ object Main extends Bot {
                         message: Message,
                         user: User): BotResponse = BotResponse.Empty
 }
-
 ```
 
 that should be everything you need to get started.
