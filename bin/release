@@ -48,8 +48,10 @@ releaseVersion() {
   printf "Version: ${bold}%s${normal} [Y/n] " "$newVersion"
   read -r answer
   if [ "$answer" != "${answer#[Yy]}" ] || [ "$answer" = "" ] ;then
+    printf "Create tag.\n"
     echo git tag -a "v$newVersion" -m "version $newVersion"
-    echo git push origin "v$newVersion"
+    printf "Push tag to origin.\n"
+    echo git push origin "v$newVersion" 2> /dev/null
   fi
 
 }

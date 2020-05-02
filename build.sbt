@@ -9,14 +9,37 @@ sonatypeProfileName := "de.martinpallmann"
 dynverSonatypeSnapshots in ThisBuild := true
 
 lazy val commonSettings = Seq(
-  publishTo := sonatypePublishToBundle.value,
+//  publishTo := sonatypePublishToBundle.value,
   headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
-  publishMavenStyle := true,
-  licenses := Seq(
-    "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
+//  publishMavenStyle := true,
+//  licenses := Seq(
+//    "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
+//  ),
+//  sonatypeProjectHosting := Some(
+//    GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
+//  ),
+  homepage := Some(url("https://martinpallmann.de/gchat")),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/martinpallmann/gchat"),
+      "git@github.com:martinpallmann/gchat.git"
+    )
   ),
-  sonatypeProjectHosting := Some(
-    GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
+  developers := List(
+    Developer(
+      "martinpallmann",
+      "Martin Pallmann",
+      "sayhello@martinpallmann.de",
+      url("https://martinpallmann.de")
+    )
+  ),
+  licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
+  publishMavenStyle := true,
+  publishTo := Some(
+    if (isSnapshot.value)
+      Opts.resolver.sonatypeSnapshots
+    else
+      Opts.resolver.sonatypeStaging
   )
 )
 publish / skip := true
