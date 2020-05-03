@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-index: true
+toc: true
 ---
 
 ## Overview
