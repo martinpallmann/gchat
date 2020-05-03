@@ -11,7 +11,9 @@ layout: outis
 Gchat is a bot creation framework for chat bots that talk to the google hangouts api.
 It can be included in your build by adding this to your `build.sbt`:
 
-```libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"```
+```sbt
+libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"
+```
 
 Then all you have to do is to implement the `Bot` trait.
 
@@ -19,7 +21,7 @@ If you run the following code it will start a http server (powered by [http4s](h
 You can change the port by setting the environment variable named `PORT` to another value.
 It listens to incoming post-requests on the root path.
 
-```scala mdoc
+```scala
 import java.time.Instant
 
 import de.martinpallmann.gchat.BotResponse
