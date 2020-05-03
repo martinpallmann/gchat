@@ -1,5 +1,5 @@
 [![Maven Central](https://img.shields.io/maven-central/v/de.martinpallmann.gchat/gchat-core_2.13.svg)](https://search.maven.org/search?q=g:de.martinpallmann.gchat)
-![Tests](https://github.com/martinpallmann/gchat/workflows/Tests/badge.svg)
+![Build](https://github.com/martinpallmann/gchat/workflows/Build/badge.svg)
 
 **gchat** is a library to facilitate writing chatbots for the google hangout api.
 
