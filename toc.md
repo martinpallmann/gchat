@@ -1,9 +1,5 @@
 ---
 title: Table of Contents
-hideIndex: true
 ---
-{% for p in site.pages %}
-- Title {{ p.title }}
-  - Url {{ p.url }}
-  - {{ p }}
+{% for p in site.pages %}{% if p.index == true %}- [{{ p.title }}]({{ p.url }}){% endif %}
 {% endfor %}
