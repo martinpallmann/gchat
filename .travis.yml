@@ -1,0 +1,8 @@
+language: scala
+deploy:
+  provider: pages
+  local_dir: gchat-docs/target/mdoc
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
