@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>GChat</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style type="text/css">{% include style.css %}</style>
-</head>
-<body>
-gchat
-<hr></hr>
-<h1>Table of Contents</h1>
+---
+title: Table of Contents
+---
 <ul>
-  {% for p in site.pages %}
-  <li><a href="{{ p.url }}">{{ p.title }}</a></li>
-  {% endfor %}
+{% for p in site.pages %}
+<li><a href="{{ p.url }}">{{ p.title }}</a></li>
+{% endfor %}
 </ul>
-{% include footer.html %}
-</body>
-</html>
