@@ -1,3 +1,7 @@
+---
+layout: outis
+---
+
 add `libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "@VERSION@"`
 to your build.sbt and implement the `Bot` trait.
 
