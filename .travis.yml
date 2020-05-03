@@ -1,4 +1,6 @@
 language: scala
+scala:
+  - 2.13.2
 deploy:
   provider: pages
   local_dir: gchat-docs/target/mdoc
