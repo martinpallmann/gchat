@@ -2,12 +2,22 @@
 layout: outis
 ---
 
-add `libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"`
-to your build.sbt and implement the `Bot` trait.
+# Gchat
 
-Like so, maybe:
+## Overview
 
-```scala
+Gchat is a bot creation framework for chat bots that talk to the google hangouts api.
+It can be included in your build by adding this to your `build.sbt`:
+
+```libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"```
+
+Then all you have to do is to implement the `Bot` trait.
+
+If you run the following code it will start a http server (powered by [http4s](https://http4s.org)) on port 9000.
+You can change the port by setting the environment variable named `PORT` to another value.
+It listens to incoming post-requests on the root path.
+
+```scala mdoc
 import java.time.Instant
 
 import de.martinpallmann.gchat.BotResponse
@@ -35,11 +45,8 @@ object Main extends Bot {
 }
 ```
 
-If you run this class it will start an http server (powered by [http4s](https://http4s.org)) on port 9000.
-You can change the port by setting the environment variable aptly named `PORT` to another value.
-It listens to incoming post-requests on the root path.
+To test the server you can run the following curl command:
 
-if you want to test the server you can run the following curl command:
 ```
 curl localhost:9000 -XPOST -d '{
     "type": "ADDED_TO_SPACE",
