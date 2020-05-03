@@ -1,5 +1,5 @@
 ---
-layout: outis
+title: Introduction
 ---
 
 # Gchat
