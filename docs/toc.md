@@ -1,10 +1,6 @@
 ---
 title: Table of Contents
 ---
-Hey
-<ul>
 {% for p in site.pages %}
-<li><a href="{{ p.url }}">{{ p.title }}</a></li>
+- [{{ p.title }}]({% link p.url %})
 {% endfor %}
-</ul>
-Hey
