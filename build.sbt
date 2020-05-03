@@ -66,26 +66,5 @@ lazy val bot = project
     )
   )
 
-lazy val example = project
-  .dependsOn(core, circe)
-  .settings(
-    moduleName := s"gchat-example",
-    commonSettings,
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "org.http4s" %% "http4s-dsl" % http4sVersion,
-      "org.http4s" %% "http4s-blaze-server" % http4sVersion,
-      "org.http4s" %% "http4s-circe" % http4sVersion,
-      "io.circe" %% "circe-parser" % circeVersion,
-      "io.circe" %% "circe-generic" % circeVersion
-    ),
-    exportJars := true,
-    publish / skip := true,
-    sbt.Keys.mainClass in Compile := Some(
-      "de.martinpallmann.gchat.example.Main"
-    )
-  )
-  .enablePlugins(JavaAppPackaging)
-
 def circeVersion = "0.13.0"
 def http4sVersion = "0.21.2"
