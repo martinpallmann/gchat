@@ -6,8 +6,6 @@ ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 sonatypeProfileName := "de.martinpallmann.gchat"
 publish / skip := true
-enablePlugins(GhpagesPlugin)
-git.remoteRepo := "git@github.com:martinpallmann/gchat.git"
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
