@@ -10,7 +10,11 @@
 gchat
 <hr></hr>
 <h1>Table of Contents</h1>
-<a href="quickstart.html">Quickstart</a>
+<ul>
+  {% for p in site.pages %}
+  <li><a href="{{ p.url }}">{{ p.title }}</a></li>
+  {% endfor %}
+</ul>
 {% include footer.html %}
 </body>
 </html>
