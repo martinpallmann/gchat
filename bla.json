@@ -1,0 +1,57 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 0,
+    "params": {
+      "q": "de.martinpallmann.gchat",
+      "core": "",
+      "defType": "dismax",
+      "qf": "text^20 g^5 a^10",
+      "indent": "off",
+      "spellcheck": "true",
+      "fl": "id,g,a,latestVersion,p,ec,repositoryId,text,timestamp,versionCount",
+      "start": "",
+      "spellcheck.count": "5",
+      "sort": "score desc,timestamp desc,g asc,a asc",
+      "rows": "1",
+      "wt": "json",
+      "version": "2.2"
+    }
+  },
+  "response": {
+    "numFound": 3,
+    "start": 0,
+    "docs": [
+      {
+        "id": "de.martinpallmann.gchat:gchat-circe_2.13",
+        "g": "de.martinpallmann.gchat",
+        "a": "gchat-circe_2.13",
+        "latestVersion": "0.0.17",
+        "repositoryId": "central",
+        "p": "jar",
+        "timestamp": 1588450027000,
+        "versionCount": 2,
+        "text": [
+          "de.martinpallmann.gchat",
+          "gchat-circe_2.13",
+          "-javadoc.jar",
+          "-sources.jar",
+          ".jar",
+          ".pom"
+        ],
+        "ec": [
+          "-javadoc.jar",
+          "-sources.jar",
+          ".jar",
+          ".pom"
+        ]
+      }
+    ]
+  },
+  "spellcheck": {
+    "suggestions": []
+  },
+  "alternate": [
+    "fc:de.martinpallmann.gchat"
+  ]
+}
