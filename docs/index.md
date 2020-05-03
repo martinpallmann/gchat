@@ -15,12 +15,16 @@ import de.martinpallmann.gchat.bot.Bot
 import de.martinpallmann.gchat.gen.{Message, Space, User}
 
 object Main extends Bot {
-  def onAddedToSpace(eventTime: Instant,
-                     space: Space,
-                     user: User): BotResponse = 
+  def onAddedToSpace(
+      eventTime: Instant,
+      space: Space,
+      user: User): BotResponse = 
     BotResponse.Text("Thanks for adding me to the space.")
 
-  def onRemovedFromSpace(eventTime: Instant, space: Space, user: User): Unit =
+  def onRemovedFromSpace(
+      eventTime: Instant, 
+      space: Space, 
+      user: User): Unit =
     {}
 
   def onMessageReceived(eventTime: Instant,
