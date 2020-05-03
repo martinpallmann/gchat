@@ -22,7 +22,7 @@ jobs:
         java-version: 11
 
     - name: Build
-      run: sbt "; test;clean ;docs/mdoc"
+      run: sbt ";clean ;test ;docs/mdoc"
 
     - name: Publish documentation
       uses: JamesIves/github-pages-deploy-action@releases/v3
