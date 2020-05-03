@@ -1,6 +1,7 @@
 ---
 title: Table of Contents
+hideIndex: true
 ---
 {% for p in site.pages %}
-- [{{ p.title }}]({% link p.url %})
+- [{{ p.title }}]({% p.url %})
 {% endfor %}
