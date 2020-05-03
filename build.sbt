@@ -70,7 +70,9 @@ lazy val docs = project
   .in(file("gchat-docs"))
   .dependsOn(bot)
   .enablePlugins(MdocPlugin)
-  .settings(mdocVariables := Map("VERSION" -> version.value))
+  .settings(
+    mdocVariables := Map("VERSION" -> version.value.replaceAll("\\+.*", ""))
+  )
 
 def circeVersion = "0.13.0"
 def http4sVersion = "0.21.2"
