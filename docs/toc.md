@@ -4,7 +4,7 @@ toc: false
 ---
 {% for p in site.pages %}
 {% if p.toc == true %}
-- [{{ p.title }}]({{ p.url }})
+- [{{ p.title }}]({{ p.path }})
 <!-- {{ p }} -->
 {% endif %}
 {% endfor %}
