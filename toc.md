@@ -3,5 +3,7 @@ title: Table of Contents
 hideIndex: true
 ---
 {% for p in site.pages %}
-- [{{ p.title }}]({{ p.url }})
+- Title {{ p.title }}
+  - Url {{ p.url }}
+  - {{ p }}
 {% endfor %}
