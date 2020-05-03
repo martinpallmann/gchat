@@ -4,6 +4,8 @@ layout: outis
 
 # Gchat
 
+{:toc}
+
 ## Overview
 
 Gchat is a bot creation framework for chat bots that talk to the google hangouts api.
