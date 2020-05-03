@@ -5,6 +5,9 @@ ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 sonatypeProfileName := "de.martinpallmann.gchat"
+publish / skip := true
+enablePlugins(GhpagesPlugin)
+git.remoteRepo := "git@github.com:martinpallmann/gchat.git"
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
@@ -17,7 +20,6 @@ lazy val commonSettings = Seq(
     GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
   )
 )
-publish / skip := true
 
 lazy val core = project
   .settings(
@@ -65,6 +67,12 @@ lazy val bot = project
       "org.http4s" %% "http4s-circe" % http4sVersion
     )
   )
+
+lazy val docs = project
+  .in(file("gchat-docs"))
+  .dependsOn(bot)
+  .enablePlugins(MdocPlugin)
+  .settings(mdocVariables := Map("VERSION" -> version.value))
 
 def circeVersion = "0.13.0"
 def http4sVersion = "0.21.2"
