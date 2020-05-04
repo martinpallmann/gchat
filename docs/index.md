@@ -30,7 +30,9 @@ object Main extends Bot {
       eventTime: Instant,
       space: Space,
       user: User): BotResponse = 
-    BotResponse.Text("Thanks for adding me to the space.")
+    BotResponse.Text(
+      "Thanks for adding me to the space."
+    )
 
   def onRemovedFromSpace(
       eventTime: Instant, 
@@ -38,11 +40,14 @@ object Main extends Bot {
       user: User): Unit =
     {}
 
-  def onMessageReceived(eventTime: Instant,
-                        space: Space,
-                        message: Message,
-                        user: User): BotResponse =
-    BotResponse.Text("Hi.")
+  def onMessageReceived(
+      eventTime: Instant,
+      space: Space,
+      message: Message,
+      user: User): BotResponse =
+    BotResponse.Text(
+      "Hi. Thank you for your message."
+    )
 }
 ```
 
@@ -60,10 +65,11 @@ curl localhost:9000 -XPOST -d '{
     "user": {
         "name": "users/12345678901234567890",
         "displayName": "Chuck Norris",
-        "avatarUrl": "https://lh3.googleusercontent.com/.../photo.jpg",
+        "avatarUrl": "https://example.com/photo.jpg",
         "email": "chuck@example.com"
     }
 }'
 ```
 
-More documentation about the message format can be found here: [https://developers.google.com/hangouts/chat/reference](https://developers.google.com/hangouts/chat/reference)
+More documentation about the message format can be found here: 
+https://developers.google.com/hangouts/chat/reference
