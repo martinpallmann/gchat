@@ -1,4 +1,4 @@
-import sbt.Keys.publishMavenStyle
+import sbt.Keys.{publish, publishMavenStyle}
 import xerial.sbt.Sonatype.GitHubHosting
 
 ThisBuild / scalaVersion := "2.13.2"
@@ -71,4 +71,7 @@ lazy val docs = project
   .in(file("gchat-docs"))
   .dependsOn(bot)
   .enablePlugins(MdocPlugin)
-  .settings(mdocVariables := Map("VERSION" -> MavenCentral.version))
+  .settings(
+    mdocVariables := Map("VERSION" -> MavenCentral.version),
+    publish / skip := true
+  )
