@@ -20,7 +20,9 @@
       border: none;
     }
     pre {
-      border: 1px solid #ccc;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      background-color: #fafafa;
       padding: 1rem;
       margin: 0 0 1rem 0;
       white-space: pre;
