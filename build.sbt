@@ -10,7 +10,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 publish / skip := true
 
 def circeVersion = "0.13.0"
-def http4sVersion = "0.21.2"
+def http4sVersion = "0.21.4"
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
