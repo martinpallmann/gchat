@@ -21,8 +21,8 @@ It listens to incoming post-requests on the root path.
 ```scala mdoc
 import java.time.Instant
 
+import de.martinpallmann.gchat.Bot
 import de.martinpallmann.gchat.BotResponse
-import de.martinpallmann.gchat.bot.Bot
 import de.martinpallmann.gchat.gen.{
   Message, 
   Space, 

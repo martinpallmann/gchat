@@ -3,17 +3,18 @@ import xerial.sbt.Sonatype.GitHubHosting
 
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
+ThisBuild / organizationName := "Martin Pallmann"
+ThisBuild / startYear := Some(2020)
+ThisBuild / licenses := Seq(License.apache2)
 Global / onChangedBuildSource := ReloadOnSourceChanges
-sonatypeProfileName := "de.martinpallmann.gchat"
 publish / skip := true
+
+def circeVersion = "0.13.0"
+def http4sVersion = "0.21.2"
 
 lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
-  headerLicense := Some(HeaderLicense.ALv2("2020", "Martin Pallmann")),
   publishMavenStyle := true,
-  licenses := Seq(
-    "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
-  ),
   sonatypeProjectHosting := Some(
     GitHubHosting("martinpallmann", "gchat", "sayhello@martinpallmann.de")
   )
@@ -71,6 +72,3 @@ lazy val docs = project
   .dependsOn(bot)
   .enablePlugins(MdocPlugin)
   .settings(mdocVariables := Map("VERSION" -> MavenCentral.version))
-
-def circeVersion = "0.13.0"
-def http4sVersion = "0.21.2"

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package de.martinpallmann.gchat.bot
+package de.martinpallmann.gchat
 
 import java.time.Instant
 
+import cats.implicits._
 import cats.data.Kleisli
 import cats.effect.{ExitCode, IO, IOApp}
 import de.martinpallmann.gchat.BotRequest.{
@@ -25,20 +26,18 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.{BotRequest, BotResponse}
-import de.martinpallmann.gchat.circe._
-import org.http4s.circe.CirceEntityEncoder._
-import org.http4s.circe.CirceEntityDecoder._
-import org.http4s.{HttpRoutes, Request, Response}
-import org.http4s.dsl.Http4sDsl
-import org.http4s.server.blaze.BlazeServerBuilder
-import org.http4s.implicits._
-import cats.implicits._
 import de.martinpallmann.gchat.gen.{Message, Space, User}
+import de.martinpallmann.gchat.circe._
+import org.http4s.circe.CirceEntityDecoder._
+import org.http4s.circe.CirceEntityEncoder._
+import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
+import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.{HttpRoutes, Request, Response}
+import org.http4s.implicits._
 
-import scala.io.Source
 import scala.io.Codec.UTF8
+import scala.io.Source
 
 trait Bot extends IOApp {
 
@@ -71,7 +70,6 @@ trait Bot extends IOApp {
       onMessageReceived(t, s, m, u)
   }
 
-  // TODO authentication
   final val botService = {
 
     val dsl = new Http4sDsl[IO] {}
@@ -85,7 +83,7 @@ trait Bot extends IOApp {
             Ok(
               eventHandling(evt).toMessage
             ) // TODO don't think that it will be always ok
-        } yield (resp)
+        } yield resp
     }
   }
 

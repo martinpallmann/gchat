@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package de.martinpallmann.gchat.circe
+package de.martinpallmann.gchat.bot
 
-import de.martinpallmann.gchat.gen.Message
-import io.circe.Encoder
-
-trait MessageEncoder {
-  implicit val encodeMessage: Encoder[Message] = encoder.encodeMessage
+class Config {
+  def port: Int = 9000
 }
