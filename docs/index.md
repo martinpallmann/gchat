@@ -23,7 +23,11 @@ import java.time.Instant
 
 import de.martinpallmann.gchat.BotResponse
 import de.martinpallmann.gchat.bot.Bot
-import de.martinpallmann.gchat.gen.{Message, Space, User}
+import de.martinpallmann.gchat.gen.{
+  Message, 
+  Space, 
+  User
+}
 
 object Main extends Bot {
   def onAddedToSpace(
