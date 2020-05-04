@@ -6,3 +6,4 @@ toc: false
 {% endif %}
 {% endfor %}
 - 💥 a lot of stuff is obviously still missing
+  - if you have suggestions for the documentation, don't hesitate to file an issue here: https://github.com/martinpallmann/gchat/issues
