@@ -6,6 +6,8 @@ toc: true
 ## Overview
 
 Gchat is a bot creation framework for chat bots that talk to the google hangouts api.
+At the moment it only supports messages that are sent synchronously e.g. 
+messages as a response to a user initiated event.
 It can be included in your build by adding this to your `build.sbt`:
 
 ```
