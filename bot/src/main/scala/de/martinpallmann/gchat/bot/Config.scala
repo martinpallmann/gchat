@@ -16,6 +16,12 @@
 
 package de.martinpallmann.gchat.bot
 
-class Config {
-  def port: Int = 9000
+import de.martinpallmann.gchat.bot.config.GoogleChatApiConfig
+
+trait Config {
+  def banner: List[String]
+  def ipAddress: String
+  def port: Int
+  def authEnabled: Boolean
+  def api: Option[GoogleChatApiConfig]
 }

@@ -26,6 +26,7 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
+import de.martinpallmann.gchat.bot.{Auth, Config, DefaultConfig}
 import de.martinpallmann.gchat.gen.{Message, Space, User}
 import de.martinpallmann.gchat.circe._
 import org.http4s.circe.CirceEntityDecoder._
@@ -35,9 +36,6 @@ import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.{HttpRoutes, Request, Response}
 import org.http4s.implicits._
-
-import scala.io.Codec.UTF8
-import scala.io.Source
 
 trait Bot extends IOApp {
 
@@ -88,23 +86,15 @@ trait Bot extends IOApp {
   }
 
   def httpApp: Kleisli[IO, Request[IO], Response[IO]] =
-    Router("/" -> botService).orNotFound
+    // Router("/" -> botService).orNotFound
+    Router("/" -> Auth.service).orNotFound
 
-  def port: Int =
-    (for {
-      p0 <- sys.env.get("PORT")
-      p1 <- p0.toIntOption
-    } yield p1).getOrElse(9000)
+  def config: Config = DefaultConfig()
 
-  def ipAddress = "0.0.0.0"
-
-  def banner: List[String] =
-    Source.fromResource("banner.txt")(UTF8).getLines.toList
-
-  override def run(args: List[String]): IO[ExitCode] = {
+  def run(args: List[String]): IO[ExitCode] = {
     BlazeServerBuilder[IO]
-      .withBanner(banner)
-      .bindHttp(port, ipAddress)
+      .withBanner(config.banner)
+      .bindHttp(config.port, config.ipAddress)
       .withHttpApp(httpApp)
       .resource
       .use(_ => IO.never)
