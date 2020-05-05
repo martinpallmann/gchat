@@ -1,57 +1,67 @@
 package de.martinpallmann.gchat.bot
 
-import cats._
+import cats.{Applicative, Defer}
 import cats.effect._
-import cats.implicits._
 import cats.data._
-import org.http4s._
+import de.martinpallmann.gchat.bot.auth.Jwt
+import org.http4s.{AuthedRoutes, _}
 import org.http4s.dsl.io._
 import org.http4s.headers.Authorization
-import org.http4s.implicits._
 import org.http4s.server._
-import org.http4s.util.CaseInsensitiveString
 import org.slf4j.LoggerFactory
 
 object Auth {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  case class User(id: Long, name: String)
-
-  def retrieveUser: Kleisli[IO, Credentials, User] =
+  private def verifyToken: Kleisli[IO, Credentials, Either[String, Unit]] =
     Kleisli {
-      case Credentials.Token(s, t)      => IO(User(1L, s"$t"))
-      case Credentials.AuthParams(_, _) => IO(User(1L, s"auth params"))
+      case Credentials.Token(_, t) =>
+        for {
+          verified <- Jwt.verify(t)
+        } yield Either.cond(verified, (), "Token not verified")
+      case _ => IO(Left("Credentials don't have a token."))
     }
 
-  val authUser: Kleisli[IO, Request[IO], Either[String, User]] = Kleisli({
-    request =>
-      val message = for {
-        header <- {
-          request.headers
-            .get(Authorization)
-            .toRight(s"Couldn't find a valid Authorization header")
-        }
-      } yield header.credentials
-      message.traverse(retrieveUser.run)
-  })
+  private def credentials(request: Request[IO]): Either[String, Credentials] =
+    for {
+      h <-
+        request.headers
+          .get(Authorization)
+          .toRight(s"No valid authorization header found.")
+    } yield h.credentials
 
-  val authedRoutes: AuthedRoutes[User, IO] =
-    AuthedRoutes.of {
-      case GET -> Root as user => Ok(s"Welcome, ${user.name}")
-    }
+  private val authRequest: Kleisli[IO, Request[IO], Either[String, Unit]] =
+    Kleisli(
+      request =>
+        (for {
+          c <- EitherT(IO(credentials(request)))
+          r <- EitherT(verifyToken(c))
+        } yield r).value
+    )
 
-  val errRoutes: AuthedRoutes[String, IO] =
-    AuthedRoutes.of {
-      case _ as err =>
-        logger.debug(err)
-        //Unauthorized("") // TODO wtf
-        Ok("unauthorized")
-    }
+  private val noAuthRequest: Kleisli[IO, Request[IO], Either[String, Unit]] =
+    Kleisli(_ => IO(Right(())))
 
-  val middleware: AuthMiddleware[IO, User] =
-    AuthMiddleware(authUser, errRoutes)
+  private val onFailure: AuthedRoutes[String, IO] =
+    Kleisli(err => {
+      logger.debug(err.context)
+      OptionT.liftF(Forbidden())
+    })
 
-  val service: HttpRoutes[IO] = middleware(authedRoutes)
+  def noAuth(
+    pf: PartialFunction[AuthedRequest[IO, Unit], IO[Response[IO]]]
+  )(implicit F: Defer[IO],
+    FA: Applicative[IO]
+  ): HttpRoutes[IO] = {
+    AuthMiddleware(noAuthRequest, onFailure).apply(AuthedRoutes.of(pf))
+  }
 
+  def apply(
+    pf: PartialFunction[AuthedRequest[IO, Unit], IO[Response[IO]]]
+  )(implicit F: Defer[IO],
+    FA: Applicative[IO]
+  ): HttpRoutes[IO] = {
+    AuthMiddleware(authRequest, onFailure).apply(AuthedRoutes.of(pf))
+  }
 }

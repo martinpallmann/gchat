@@ -16,11 +16,7 @@
 
 package de.martinpallmann.gchat.bot
 
-import de.martinpallmann.gchat.bot.config.GoogleChatApiConfig
-import io.circe.Json
-import io.circe.parser.parse
 import org.slf4j.LoggerFactory
-import cats.implicits._
 
 import scala.io.Codec.UTF8
 import scala.io.Source
@@ -37,29 +33,13 @@ class DefaultConfig extends Config {
   def ipAddress: String = "0.0.0.0"
 
   def authEnabled: Boolean =
-    env.contains("GOOGLE_CHAT_API_CONFIG")
+    env.get("AUTH_ENABLED").flatMap(_.toBooleanOption).getOrElse(false)
 
   def port: Int =
     (for {
       p0 <- env.get("PORT")
       p1 <- p0.toIntOption
     } yield p1).getOrElse(9000)
-
-  def api: Option[GoogleChatApiConfig] =
-    for {
-      s <- env.get("GOOGLE_CHAT_API_CONFIG")
-      j <- parseJson(s)
-      c <- GoogleChatApiConfig.fromJson(j)
-    } yield c
-
-  private def parseJson(s: String): Option[Json] =
-    parse(s).fold(
-      f => {
-        logger.debug(f.show)
-        None
-      },
-      Some(_)
-    )
 }
 
 object DefaultConfig {

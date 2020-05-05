@@ -16,12 +16,9 @@
 
 package de.martinpallmann.gchat.bot
 
-import de.martinpallmann.gchat.bot.config.GoogleChatApiConfig
-
 trait Config {
   def banner: List[String]
   def ipAddress: String
   def port: Int
   def authEnabled: Boolean
-  def api: Option[GoogleChatApiConfig]
 }
