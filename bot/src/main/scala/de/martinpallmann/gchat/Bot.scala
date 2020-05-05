@@ -71,7 +71,7 @@ trait Bot extends IOApp {
       onMessageReceived(t, s, m, u)
   }
 
-  final val authedRoutes
+  final val service
     : PartialFunction[AuthedRequest[IO, Unit], IO[Response[IO]]] = {
     case r @ POST -> Root as _ =>
       for {
@@ -80,14 +80,10 @@ trait Bot extends IOApp {
       } yield resp
   }
 
-  def httpApp: Kleisli[IO, Request[IO], Response[IO]] = {
-    val service =
-      if (config.authEnabled) Auth(authedRoutes)
-      else Auth.noAuth(authedRoutes)
-    Router("/" -> service).orNotFound
-  }
+  def httpApp: Kleisli[IO, Request[IO], Response[IO]] =
+    Router("/" -> Auth(config.authConfig).routes(service)).orNotFound
 
-  def config: Config = DefaultConfig()
+  def config: Config = Config()
 
   def run(args: List[String]): IO[ExitCode] = {
     BlazeServerBuilder[IO](Execution.trampoline)

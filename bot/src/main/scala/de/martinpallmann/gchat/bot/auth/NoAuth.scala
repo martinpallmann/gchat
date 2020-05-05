@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-package de.martinpallmann.gchat.bot
+package de.martinpallmann.gchat.bot.auth
 
-trait Config {
-  def banner: List[String]
-  def ipAddress: String
-  def port: Int
-  def authEnabled: Boolean
+import cats.data.Kleisli
+import cats.effect.IO
+import cats.{Applicative, Defer}
+import de.martinpallmann.gchat.bot.Auth
+import org.http4s.server.AuthMiddleware
+import org.http4s._
+
+object NoAuth extends Auth {
+
+  private val noAuthRequest: Kleisli[IO, Request[IO], Either[String, Unit]] =
+    Kleisli(_ => IO(Right(())))
+
+  def routes(
+    pf: PartialFunction[AuthedRequest[IO, Unit], IO[Response[IO]]]
+  )(implicit F: Defer[IO],
+    FA: Applicative[IO]
+  ): HttpRoutes[IO] =
+    AuthMiddleware(noAuthRequest, onFailure).apply(AuthedRoutes.of(pf))
 }

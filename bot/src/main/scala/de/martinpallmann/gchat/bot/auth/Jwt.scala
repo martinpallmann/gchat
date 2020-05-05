@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Martin Pallmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.martinpallmann.gchat.bot.auth
 
 import java.security.interfaces.{RSAPrivateKey, RSAPublicKey}
@@ -10,7 +26,7 @@ import com.auth0.jwt.interfaces.RSAKeyProvider
 import scala.concurrent.duration._
 import scala.util.Try
 
-object Jwt {
+class Jwt(googleProjectNo: String) {
 
   private val url =
     "https://www.googleapis.com/service_accounts/v1/metadata/x509/" +
@@ -18,13 +34,13 @@ object Jwt {
 
   private val verification = for {
     st <- PublicKeyStorage(url)
-  } yield JWT.require(Algorithm.RSA256(Jwt.keyProvider(st)))
+  } yield JWT.require(Algorithm.RSA256(keyProvider(st)))
 
   private val verifier: IO[JWTVerifier] =
     verification.map(
       _.acceptLeeway(5.minutes.toSeconds)
         .withIssuer("chat@system.gserviceaccount.com")
-        .withAudience("301972490637")
+        .withAudience(googleProjectNo)
         .build()
     )
 
@@ -48,4 +64,8 @@ object Jwt {
       def getPrivateKeyId: String =
         null
     }
+}
+
+object Jwt {
+  def apply(googleProjectNo: String): Jwt = new Jwt(googleProjectNo)
 }
