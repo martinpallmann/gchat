@@ -9,7 +9,7 @@ Gchat is a bot creation framework for chat bots that talk to the google hangouts
 It can be included in your build by adding this to your `build.sbt`:
 
 ```
-libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.17"
+libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.19"
 ```
 
 Then all you have to do is to implement the `Bot` trait.
