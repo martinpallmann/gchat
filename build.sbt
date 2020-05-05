@@ -63,8 +63,13 @@ lazy val bot = project
     libraryDependencies ++= Seq(
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
-      "org.http4s" %% "http4s-circe" % http4sVersion
-    )
+      "org.http4s" %% "http4s-circe" % http4sVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
+      "com.auth0" % "java-jwt" % "3.10.2",
+      "io.monix" %% "minitest" % "2.8.2" % Test,
+      "org.slf4j" % "slf4j-nop" % "1.7.30" % Test
+    ),
+    testFrameworks += new TestFramework("minitest.runner.Framework")
   )
 
 lazy val docs = project

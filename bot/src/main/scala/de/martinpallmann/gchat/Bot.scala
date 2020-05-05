@@ -18,7 +18,6 @@ package de.martinpallmann.gchat
 
 import java.time.Instant
 
-import cats.implicits._
 import cats.data.Kleisli
 import cats.effect.{ExitCode, IO, IOApp}
 import de.martinpallmann.gchat.BotRequest.{
@@ -26,18 +25,17 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
+import de.martinpallmann.gchat.bot.{Auth, Config, DefaultConfig}
 import de.martinpallmann.gchat.gen.{Message, Space, User}
 import de.martinpallmann.gchat.circe._
+import org.http4s.blaze.util.Execution
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
-import org.http4s.{HttpRoutes, Request, Response}
+import org.http4s.{AuthedRequest, Request, Response}
 import org.http4s.implicits._
-
-import scala.io.Codec.UTF8
-import scala.io.Source
 
 trait Bot extends IOApp {
 
@@ -60,6 +58,9 @@ trait Bot extends IOApp {
     user: User
   ): BotResponse
 
+  private val dsl: Http4sDsl[IO] = new Http4sDsl[IO] {}
+  import dsl._
+
   private val eventHandling: BotRequest => BotResponse = {
     case AddedToSpace(t, s, _, u) =>
       onAddedToSpace(t, s, u)
@@ -70,41 +71,28 @@ trait Bot extends IOApp {
       onMessageReceived(t, s, m, u)
   }
 
-  final val botService = {
-
-    val dsl = new Http4sDsl[IO] {}
-    import dsl._
-
-    HttpRoutes.of[IO] {
-      case req @ POST -> Root =>
-        for {
-          evt <- req.as[BotRequest]
-          resp <-
-            Ok(
-              eventHandling(evt).toMessage
-            ) // TODO don't think that it will be always ok
-        } yield resp
-    }
+  final val authedRoutes
+    : PartialFunction[AuthedRequest[IO, Unit], IO[Response[IO]]] = {
+    case r @ POST -> Root as _ =>
+      for {
+        evt <- r.req.as[BotRequest]
+        resp <- Ok(eventHandling(evt).toMessage)
+      } yield resp
   }
 
-  def httpApp: Kleisli[IO, Request[IO], Response[IO]] =
-    Router("/" -> botService).orNotFound
+  def httpApp: Kleisli[IO, Request[IO], Response[IO]] = {
+    val service =
+      if (config.authEnabled) Auth(authedRoutes)
+      else Auth.noAuth(authedRoutes)
+    Router("/" -> service).orNotFound
+  }
 
-  def port: Int =
-    (for {
-      p0 <- sys.env.get("PORT")
-      p1 <- p0.toIntOption
-    } yield p1).getOrElse(9000)
+  def config: Config = DefaultConfig()
 
-  def ipAddress = "0.0.0.0"
-
-  def banner: List[String] =
-    Source.fromResource("banner.txt")(UTF8).getLines.toList
-
-  override def run(args: List[String]): IO[ExitCode] = {
-    BlazeServerBuilder[IO]
-      .withBanner(banner)
-      .bindHttp(port, ipAddress)
+  def run(args: List[String]): IO[ExitCode] = {
+    BlazeServerBuilder[IO](Execution.trampoline)
+      .withBanner(config.banner)
+      .bindHttp(config.port, config.ipAddress)
       .withHttpApp(httpApp)
       .resource
       .use(_ => IO.never)

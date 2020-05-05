@@ -16,9 +16,32 @@
 
 package de.martinpallmann.gchat.bot
 
-trait Config {
-  def banner: List[String]
-  def ipAddress: String
-  def port: Int
-  def authEnabled: Boolean
+import org.slf4j.LoggerFactory
+
+import scala.io.Codec.UTF8
+import scala.io.Source
+
+class DefaultConfig extends Config {
+
+  private val logger = LoggerFactory.getLogger(getClass)
+
+  def env: Map[String, String] = sys.env
+
+  def banner: List[String] =
+    Source.fromResource("banner.txt")(UTF8).getLines.toList
+
+  def ipAddress: String = "0.0.0.0"
+
+  def authEnabled: Boolean =
+    env.get("AUTH_ENABLED").flatMap(_.toBooleanOption).getOrElse(false)
+
+  def port: Int =
+    (for {
+      p0 <- env.get("PORT")
+      p1 <- p0.toIntOption
+    } yield p1).getOrElse(9000)
+}
+
+object DefaultConfig {
+  def apply(): Config = new DefaultConfig()
 }
