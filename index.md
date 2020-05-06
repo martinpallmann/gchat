@@ -11,7 +11,7 @@ messages as a response to a user initiated event.
 It can be included in your build by adding this to your `build.sbt`:
 
 ```
-libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.19"
+libraryDependencies += "de.martinpallmann.gchat" %% "gchat-bot" % "0.0.21"
 ```
 
 Then all you have to do is to implement the `Bot` trait.
