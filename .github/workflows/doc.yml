@@ -1,4 +1,4 @@
-name: Documentation
+name: Create Documentation
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build
+      - name: Build Documentation
         run: sbt ";clean ;docs/mdoc"
 
       - name: Publish documentation
