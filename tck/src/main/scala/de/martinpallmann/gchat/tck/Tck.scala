@@ -38,7 +38,7 @@ trait Tck[JSON] extends AnyFunSuite {
     tests("request").map(
       t =>
         test(s"should decode bot request: $t") {
-          assert(request(t) == decode(readJson("event", t)).get)
+          assert(request(t) == decode(readJson("request", t)).get)
         }
     )
 
