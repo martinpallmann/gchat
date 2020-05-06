@@ -40,8 +40,7 @@ lazy val tck = project
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
       "org.scalatest" %% "scalatest" % "3.1.1"
-    ),
-    publish / skip := true
+    )
   )
 
 lazy val circe = project
