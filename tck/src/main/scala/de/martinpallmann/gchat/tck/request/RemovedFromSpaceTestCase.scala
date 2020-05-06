@@ -22,21 +22,11 @@ import de.martinpallmann.gchat.BotRequest
 import de.martinpallmann.gchat.gen._
 import de.martinpallmann.gchat.tck.BotRequestTestCase
 
-class AddedToSpaceTestCase extends BotRequestTestCase {
+class RemovedFromSpaceTestCase extends BotRequestTestCase {
   def request: BotRequest =
-    BotRequest.AddedToSpace(
+    BotRequest.RemovedFromSpace(
       Instant.parse("2017-03-02T19:02:59.910959Z"),
-      Space(
-        name = "spaces/AAAAAAAAAAA",
-        displayName = "Chuck Norris Discussion Room",
-        `type` = SpaceType.Room
-      ),
-      None,
-      User(
-        name = "users/12345678901234567890",
-        displayName = "Chuck Norris",
-        `type` = UserType.Human,
-        domainId = "domainId"
-      )
+      Space(name = "spaces/AAAAAAAAAAA", `type` = SpaceType.Dm),
+      User(name = "users/12345678901234567890", displayName = "Chuck Norris")
     )
 }
