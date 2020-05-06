@@ -17,6 +17,7 @@
 package de.martinpallmann.gchat.tck
 
 import de.martinpallmann.gchat.BotRequest
+import de.martinpallmann.gchat.gen.Message
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.io.Source
@@ -25,22 +26,21 @@ import scala.util.Try
 trait Tck[JSON] extends AnyFunSuite {
 
   def parseJson: String => Try[JSON]
-  // def encode: Response => JSON
+  def encode: Message => JSON
   def decode: JSON => Try[BotRequest]
 
-//  tests("response").map(
-//    t =>
-//      test(s"should encode response: $t") {
-//        assert(readJson("response", t) == encode(response(t)))
-//    }
-//  ) ++
-  tests("event").map(
+  tests("response").map(
     t =>
-      test(s"should decode event: $t") {
-        // TODO: better error handling
-        assert(event(t) == decode(readJson("event", t)).get)
+      test(s"should encode response: $t") {
+        assert(readJson("response", t) == encode(response(t)))
       }
-  )
+  ) ++
+    tests("request").map(
+      t =>
+        test(s"should decode bot request: $t") {
+          assert(request(t) == decode(readJson("event", t)).get)
+        }
+    )
 
   private def tests(dir: String): List[String] =
     Source
@@ -60,19 +60,19 @@ trait Tck[JSON] extends AnyFunSuite {
     }
   }
 
-//  private def response(test: String): Response =
-//    Reflection
-//      .responseTestCase(
-//        s"de.martinpallmann.gchat.tck.response.${toCamelCase(test)}"
-//      )
-//      .response
-
-  private def event(test: String): BotRequest =
+  private def response(test: String): Message =
     Reflection
-      .eventTestCase(
-        s"de.martinpallmann.gchat.tck.event.${toCamelCase(test)}TestCase"
+      .responseTestCase(
+        s"de.martinpallmann.gchat.tck.response.${toCamelCase(test)}TestCase"
       )
-      .event
+      .response
+
+  private def request(test: String): BotRequest =
+    Reflection
+      .requestTestCase(
+        s"de.martinpallmann.gchat.tck.request.${toCamelCase(test)}TestCase"
+      )
+      .request
 
   private def toCamelCase(s: String): String = {
     val toUpper: Char => Char = _.toUpper
