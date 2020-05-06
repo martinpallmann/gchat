@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  check_headers:
 
     runs-on: ubuntu-latest
 
