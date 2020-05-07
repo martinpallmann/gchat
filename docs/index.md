@@ -28,15 +28,16 @@ import de.martinpallmann.gchat.BotResponse
 import de.martinpallmann.gchat.gen.{
   Message, 
   Space, 
-  User
+  User,
+  FormAction
 }
 
 object Main extends Bot {
   def onAddedToSpace(
       eventTime: Instant,
       space: Space,
-      user: User): BotResponse = 
-    BotResponse.Text(
+      user: User): Message = 
+    BotResponse.text(
       "Thanks for adding me to the space."
     )
 
@@ -50,9 +51,19 @@ object Main extends Bot {
       eventTime: Instant,
       space: Space,
       message: Message,
-      user: User): BotResponse =
-    BotResponse.Text(
-      "Hi. Thank you for your message."
+      user: User): Message =
+    BotResponse.text(
+      "Got a message."
+    )
+
+  def onCardClicked(
+      eventTime: Instant,
+      space: Space,
+      message: Message,
+      user: User,
+      action: FormAction): Message =
+    BotResponse.text(
+      "You clicked a card."
     )
 }
 ```

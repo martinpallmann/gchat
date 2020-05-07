@@ -22,11 +22,12 @@ import cats.data.Kleisli
 import cats.effect.{ExitCode, IO, IOApp}
 import de.martinpallmann.gchat.BotRequest.{
   AddedToSpace,
+  CardClicked,
   MessageReceived,
   RemovedFromSpace
 }
 import de.martinpallmann.gchat.bot.{Auth, Config}
-import de.martinpallmann.gchat.gen.{Message, Space, User}
+import de.martinpallmann.gchat.gen.{FormAction, Message, Space, User}
 import de.martinpallmann.gchat.circe._
 import org.http4s.blaze.util.Execution
 import org.http4s.circe.CirceEntityDecoder._
@@ -58,6 +59,14 @@ trait Bot extends IOApp {
     user: User
   ): Message
 
+  def onCardClicked(
+    eventTime: Instant,
+    space: Space,
+    message: Message,
+    user: User,
+    action: FormAction
+  ): Message
+
   private val dsl: Http4sDsl[IO] = new Http4sDsl[IO] {}
   import dsl._
 
@@ -69,6 +78,8 @@ trait Bot extends IOApp {
       BotResponse.empty
     case MessageReceived(t, s, m, u) =>
       onMessageReceived(t, s, m, u)
+    case CardClicked(t, s, m, u, a) =>
+      onCardClicked(t, s, m, u, a)
   }
 
   final val service

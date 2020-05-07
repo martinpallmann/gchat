@@ -46,9 +46,9 @@ object BotRequest {
 
   case class CardClicked(
     eventTime: Instant,
+    space: Space,
     message: Message,
     user: User,
-    space: Space,
     action: FormAction)
       extends BotRequest
 }

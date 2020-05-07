@@ -10,6 +10,11 @@ class CardClickedTestCase extends BotRequestTestCase {
   def request: BotRequest =
     BotRequest.CardClicked(
       Instant.parse("2017-11-14T01:44:58.521823Z"),
+      Space(
+        name = "spaces/AAAAtZLKDkk",
+        displayName = "Testing Room",
+        `type` = SpaceType.Room
+      ),
       Message(
         name = "spaces/AAAAtZLKDkk/messages/e3fCf-i1PXE.8OGDcWT2HwI",
         sender = User(
@@ -29,11 +34,6 @@ class CardClickedTestCase extends BotRequestTestCase {
         name = "users/102651148563033885715",
         displayName = "Geordi La Forge",
         `type` = UserType.Human
-      ),
-      Space(
-        name = "spaces/AAAAtZLKDkk",
-        displayName = "Testing Room",
-        `type` = SpaceType.Room
       ),
       FormAction(
         actionMethodName = "upvote",
