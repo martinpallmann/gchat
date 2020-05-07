@@ -25,7 +25,7 @@ import de.martinpallmann.gchat.BotRequest.{
   MessageReceived,
   RemovedFromSpace
 }
-import de.martinpallmann.gchat.bot.{Auth, Config, DefaultConfig}
+import de.martinpallmann.gchat.bot.{Auth, Config}
 import de.martinpallmann.gchat.gen.{Message, Space, User}
 import de.martinpallmann.gchat.circe._
 import org.http4s.blaze.util.Execution
@@ -34,7 +34,7 @@ import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
-import org.http4s.{AuthedRequest, Request, Response}
+import org.http4s.{AuthedRequest, HttpRoutes, Request, Response}
 import org.http4s.implicits._
 
 trait Bot extends IOApp {
@@ -43,7 +43,7 @@ trait Bot extends IOApp {
     eventTime: Instant,
     space: Space,
     user: User
-  ): BotResponse
+  ): Message
 
   def onRemovedFromSpace(
     eventTime: Instant,
@@ -56,17 +56,17 @@ trait Bot extends IOApp {
     space: Space,
     message: Message,
     user: User
-  ): BotResponse
+  ): Message
 
   private val dsl: Http4sDsl[IO] = new Http4sDsl[IO] {}
   import dsl._
 
-  private val eventHandling: BotRequest => BotResponse = {
+  private val eventHandling: BotRequest => Message = {
     case AddedToSpace(t, s, _, u) =>
       onAddedToSpace(t, s, u)
     case RemovedFromSpace(t, s, u) =>
       onRemovedFromSpace(t, s, u)
-      BotResponse.Empty
+      BotResponse.empty
     case MessageReceived(t, s, m, u) =>
       onMessageReceived(t, s, m, u)
   }
@@ -76,22 +76,30 @@ trait Bot extends IOApp {
     case r @ POST -> Root as _ =>
       for {
         evt <- r.req.as[BotRequest]
-        resp <- Ok(eventHandling(evt).toMessage)
+        resp <- Ok(eventHandling(evt))
       } yield resp
   }
 
+  def routes: HttpRoutes[IO] =
+    Router("/" -> Auth(config.authConfig).routes(service))
+
   def httpApp: Kleisli[IO, Request[IO], Response[IO]] =
-    Router("/" -> Auth(config.authConfig).routes(service)).orNotFound
+    routes.orNotFound
 
   def config: Config = Config()
 
-  def run(args: List[String]): IO[ExitCode] = {
-    BlazeServerBuilder[IO](Execution.trampoline)
-      .withBanner(config.banner)
-      .bindHttp(config.port, config.ipAddress)
-      .withHttpApp(httpApp)
-      .resource
-      .use(_ => IO.never)
-      .as(ExitCode.Success)
-  }
+  def init(): IO[Unit] = IO.unit
+
+  def run(args: List[String]): IO[ExitCode] =
+    for {
+      _ <- init()
+      res <-
+        BlazeServerBuilder[IO](Execution.trampoline)
+          .withBanner(config.banner)
+          .bindHttp(config.port, config.ipAddress)
+          .withHttpApp(httpApp)
+          .resource
+          .use(_ => IO.never)
+          .as(ExitCode.Success)
+    } yield res
 }
