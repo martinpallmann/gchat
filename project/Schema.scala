@@ -11,7 +11,12 @@ case class Schema(
   pck: Option[String]) {
 
   def classes: List[ClassEtAlDef] =
-    CaseClassDef(id, description.map(ScalaDoc), members) :: properties.toList
+    CaseClassDef(
+      id,
+      description.map(ScalaDoc),
+      members,
+      methods
+    ) :: properties.toList
       .flatMap {
         case (name, property) =>
           property.enums2(id + name.name.capitalize)
@@ -21,6 +26,17 @@ case class Schema(
     properties.map {
       case (name, property) =>
         MemberDef(name.name, property.show(id + name.name.capitalize))
+    }.toList
+
+  def methods: List[MethodDef] =
+    properties.map {
+      case (name, property) =>
+        MethodDef(
+          s"$name",
+          property.show(id + name.name.capitalize),
+          id,
+          s"this.copy($name = a)"
+        )
     }.toList
 
   def pckString: String = pck.map(p => s"package $p\n\n").getOrElse("")

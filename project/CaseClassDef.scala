@@ -5,7 +5,8 @@ sealed trait ClassEtAlDef {
 case class CaseClassDef(
   name: String,
   doc: Option[ScalaDoc],
-  members: List[MemberDef])
+  members: List[MemberDef],
+  methods: List[MethodDef])
     extends ClassEtAlDef {
 
   private def srcMembers: String =
@@ -15,8 +16,12 @@ case class CaseClassDef(
 
   def docStr: String = doc.fold("")(d => s"$d")
 
+  def methodsStr: String =
+    if (methods.isEmpty) ""
+    else methods.mkString(" {\n\n  ", "\n\n  ", "\n}")
+
   def src: String =
-    s"${docStr}final case class $name($srcMembers)"
+    s"${docStr}final case class $name($srcMembers)$methodsStr"
 }
 
 case class EnumDef(name: String, values: List[String]) extends ClassEtAlDef {
