@@ -1,5 +1,6 @@
 import sbt.Keys.{publish, publishMavenStyle}
 import xerial.sbt.Sonatype.GitHubHosting
+import Path.relativeTo
 
 ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "de.martinpallmann.gchat"
@@ -28,6 +29,12 @@ lazy val core = project
       val input = (Compile / sourceDirectory).value / "json" / "rest.json"
       val target = (Compile / sourceManaged).value
       SourceGen.generate(input, target)
+    },
+    mappings in (Compile, packageSrc) ++= {
+      val allGeneratedFiles = ((sourceManaged in Compile).value ** "*") filter {
+        _.isFile
+      }
+      allGeneratedFiles.get.pair(relativeTo((sourceManaged in Compile).value))
     }
   )
 

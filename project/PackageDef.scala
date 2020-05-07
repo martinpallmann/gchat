@@ -7,7 +7,7 @@ class PackageDef(pckgs: List[String]) {
 
   def src: String =
     if (pckgs.isEmpty) ""
-    else pckgs.mkString("package ", ".", "\n")
+    else pckgs.mkString("package ", ".", "\n\n")
 
   def file: Path =
     if (pckgs.isEmpty) Paths.get(".")

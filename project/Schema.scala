@@ -11,7 +11,7 @@ case class Schema(
   pck: Option[String]) {
 
   def classes: List[ClassEtAlDef] =
-    CaseClassDef(id, members) :: properties.toList
+    CaseClassDef(id, description.map(ScalaDoc), members) :: properties.toList
       .flatMap {
         case (name, property) =>
           property.enums2(id + name.name.capitalize)
