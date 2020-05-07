@@ -1,0 +1,46 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2017-11-14T01:44:58.521823Z",
+  "message": {
+    "name": "spaces/AAAAtZLKDkk/messages/e3fCf-i1PXE.8OGDcWT2HwI",
+    "sender": {
+      "name": "users/118066814328248020034",
+      "displayName": "Test Bot",
+      "avatarUrl": "https://lh6.googleusercontent.com/...",
+      "type": "BOT"
+    },
+    "createTime": "2017-11-14T01:44:58.521823Z",
+    "space": {
+      "name": "spaces/AAAAtZLKDkk",
+      "type": "ROOM",
+      "displayName": "Testing Room"
+    },
+    "thread": {
+      "name": "spaces/AAAAtZLKDkk/threads/e3fCf-i1PXE"
+    }
+  },
+  "user": {
+    "name": "users/102651148563033885715",
+    "displayName": "Geordi La Forge",
+    "avatarUrl": "https://dev2-lighthouse.sandbox.google.com/...",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAAAtZLKDkk",
+    "type": "ROOM",
+    "displayName": "Testing Room"
+  },
+  "action": {
+    "actionMethodName": "upvote",
+    "parameters": [
+      {
+        "key": "count",
+        "value": "7"
+      },
+      {
+        "key": "id",
+        "value": "123456"
+      }
+    ]
+  }
+}

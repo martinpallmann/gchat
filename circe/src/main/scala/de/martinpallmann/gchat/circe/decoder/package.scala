@@ -21,6 +21,7 @@ import java.time.Instant
 import de.martinpallmann.gchat.BotRequest
 import de.martinpallmann.gchat.BotRequest.{
   AddedToSpace,
+  CardClicked,
   MessageReceived,
   RemovedFromSpace
 }
@@ -223,6 +224,9 @@ package object decoder {
   implicit val decodeRemovedFromSpace: Decoder[RemovedFromSpace] =
     deriveDecoder[RemovedFromSpace]
 
+  implicit val decodeCardClicked: Decoder[CardClicked] =
+    deriveDecoder[CardClicked]
+
   implicit val decodeBotRequest: Decoder[BotRequest] = (c: HCursor) =>
     for {
       t <- c.downField("type").as[String]
@@ -230,6 +234,7 @@ package object decoder {
         case "ADDED_TO_SPACE"     => decodeAddedToSpace(c)
         case "MESSAGE"            => decodeMessageReceived(c)
         case "REMOVED_FROM_SPACE" => decodeRemovedFromSpace(c)
+        case "CARD_CLICKED"       => decodeCardClicked(c)
         case x                    => Left(DecodingFailure(s"unknown type: $x", c.history))
       }
     } yield r

@@ -28,16 +28,16 @@ case class Schema(
         MemberDef(name.name, property.show(id + name.name.capitalize))
     }.toList
 
-  def methods: List[MethodDef] =
-    properties.map {
-      case (name, property) =>
-        MethodDef(
-          s"$name",
-          property.show(id + name.name.capitalize),
-          id,
-          s"this.copy($name = a)"
-        )
-    }.toList
+  def methods: List[MethodDef] = Nil
+//    properties.map {
+//      case (name, property) =>
+//        MethodDef(
+//          s"$name",
+//          property.show(id + name.name.capitalize),
+//          id,
+//          s"this.copy($name = a)"
+//        )
+//    }.toList
 
   def pckString: String = pck.map(p => s"package $p\n\n").getOrElse("")
 
