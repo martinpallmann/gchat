@@ -32,7 +32,7 @@ import org.http4s.blaze.util.Execution
 import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.dsl.Http4sDsl
-import org.http4s.server.Router
+import org.http4s.server.{DefaultServiceErrorHandler, Router}
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.{AuthedRequest, HttpRoutes, Request, Response}
 import org.http4s.implicits._
@@ -90,6 +90,10 @@ trait Bot extends IOApp {
 
   def init(): IO[Unit] = IO.unit
 
+  def errorHandler
+    : Request[IO] => PartialFunction[Throwable, IO[Response[IO]]] =
+    DefaultServiceErrorHandler[IO]
+
   def run(args: List[String]): IO[ExitCode] =
     for {
       _ <- init()
@@ -98,6 +102,7 @@ trait Bot extends IOApp {
           .withBanner(config.banner)
           .bindHttp(config.port, config.ipAddress)
           .withHttpApp(httpApp)
+          .withServiceErrorHandler(errorHandler)
           .resource
           .use(_ => IO.never)
           .as(ExitCode.Success)
