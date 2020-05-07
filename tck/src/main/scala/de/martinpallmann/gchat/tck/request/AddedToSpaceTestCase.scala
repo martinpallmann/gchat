@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package de.martinpallmann.gchat.tck.event
+package de.martinpallmann.gchat.tck.request
 
 import java.time.Instant
 
-import de.martinpallmann.gchat.BotRequest.RemovedFromSpace
 import de.martinpallmann.gchat.BotRequest
 import de.martinpallmann.gchat.gen._
-import de.martinpallmann.gchat.tck.EventTestCase
+import de.martinpallmann.gchat.tck.BotRequestTestCase
 
-class RemovedFromSpaceTestCase extends EventTestCase {
-  def event: BotRequest = {
-//    RemovedFromSpaceEvent(
-//      Instant.parse("2017-03-02T19:02:59.910959Z"),
-//      Space("spaces/AAAAAAAAAAA", "", SpaceType.Dm),
-//      User(
-//        "users/12345678901234567890",
-//        "Chuck Norris",
-//        UserType.Human,
-//        "https://lh3.googleusercontent.com/.../photo.jpg"
-//      )
-//    )
-    ???
-  }
+class AddedToSpaceTestCase extends BotRequestTestCase {
+  def request: BotRequest =
+    BotRequest.AddedToSpace(
+      Instant.parse("2017-03-02T19:02:59.910959Z"),
+      Space(
+        name = "spaces/AAAAAAAAAAA",
+        displayName = "Chuck Norris Discussion Room",
+        `type` = SpaceType.Room
+      ),
+      None,
+      User(
+        name = "users/12345678901234567890",
+        displayName = "Chuck Norris",
+        `type` = UserType.Human,
+        domainId = "domainId"
+      )
+    )
 }

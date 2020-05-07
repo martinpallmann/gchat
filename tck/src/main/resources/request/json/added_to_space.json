@@ -9,6 +9,8 @@
   "user": {
     "name": "users/12345678901234567890",
     "displayName": "Chuck Norris",
+    "type": "HUMAN",
+    "domainId": "domainId",
     "avatarUrl": "https://lh3.googleusercontent.com/.../photo.jpg",
     "email": "chuck@example.com"
   }

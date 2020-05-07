@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package de.martinpallmann.gchat.circe
+package de.martinpallmann.gchat.tck
 
 import de.martinpallmann.gchat.BotRequest
-import de.martinpallmann.gchat.gen.Message
-import de.martinpallmann.gchat.tck.Tck
-import io.circe.Json
-import io.circe.parser._
 
-import scala.util.Try
+import scala.language.implicitConversions
 
-class IntegrationTest
-    extends Tck[Json]
-    with BotRequestDecoder
-    with MessageEncoder {
-
-  def parseJson: String => Try[Json] = parse(_).toTry
-
-  def decode: Json => Try[BotRequest] = _.as[BotRequest](decodeBotRequest).toTry
-
-  def encode: Message => Json = encodeMessage.apply
+abstract private[tck] class BotRequestTestCase {
+  protected final implicit def anyToOption[A](a: A): Option[A] = Option(a)
+  def request: BotRequest
+  override def toString: String = request.toString
 }
