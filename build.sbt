@@ -46,7 +46,7 @@ lazy val tck = project
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "org.scalatest" %% "scalatest" % "3.1.2"
+      "org.scalatest" %% "scalatest" % "3.1.4"
     )
   )
 
