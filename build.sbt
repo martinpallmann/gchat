@@ -73,7 +73,7 @@ lazy val bot = project
       "io.circe" %% "circe-parser" % circeVersion,
       "com.auth0" % "java-jwt" % "3.10.3",
       "io.monix" %% "minitest" % "2.8.2" % Test,
-      "org.slf4j" % "slf4j-nop" % "1.7.30" % Test
+      "org.slf4j" % "slf4j-nop" % "1.7.36" % Test
     ),
     testFrameworks += new TestFramework("minitest.runner.Framework")
   )
